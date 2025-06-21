@@ -4,7 +4,8 @@
     "declarationMap": true,
     "emitDeclarationOnly": true,
     "importHelpers": true,
-    "isolatedModules": true,
+    "isolatedModules": false, //Disable isolatedModules (Not recommended for large projects)
+    "verbatimModuleSyntax": false,
     "lib": ["es2022"],
     "module": "nodenext",
     "moduleResolution": "nodenext",
@@ -14,6 +15,7 @@
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "skipLibCheck": true,
+    "experimentalDecorators": true,
     "strict": true,
     "target": "es2022",
     "customConditions": ["development"]

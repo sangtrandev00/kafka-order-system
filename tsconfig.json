@@ -4,10 +4,31 @@
   "files": [],
   "references": [
     {
-      "path": "./apps/kafka-microservices-e2e"
+      "path": "./apps/order-gateway-e2e"
     },
     {
-      "path": "./apps/kafka-microservices"
+      "path": "./apps/order-gateway"
+    },
+    {
+      "path": "./apps/order-service-e2e"
+    },
+    {
+      "path": "./apps/order-service"
+    },
+    {
+      "path": "./apps/notification-service-e2e"
+    },
+    {
+      "path": "./apps/notification-service"
+    },
+    {
+      "path": "./apps/logger-service-e2e"
+    },
+    {
+      "path": "./apps/logger-service"
+    },
+    {
+      "path": "./libs/shared"
     }
   ]
 }

@@ -14,6 +14,10 @@
     ],
     "sharedGlobals": ["{workspaceRoot}/.github/workflows/ci.yml"]
   },
+  "workspaceLayout": {
+    "appsDir": "apps",
+    "libsDir": "libs"
+  },
   "nxCloudId": "68565df92124c93d64631099",
   "plugins": [
     {
@@ -28,7 +32,8 @@
           "buildDepsName": "build-deps",
           "watchDepsName": "watch-deps"
         }
-      }
+      },
+      "exclude": ["libs/shared/*"]
     },
     {
       "plugin": "@nx/webpack/plugin",
@@ -47,13 +52,49 @@
       }
     },
     {
+      "plugin": "@nx/nest",
+      "options": {
+        "unitTestRunner": "jest"
+      }
+    },
+    {
       "plugin": "@nx/jest/plugin",
       "options": {
         "targetName": "test"
       },
-      "exclude": ["apps/kafka-microservices-e2e/**/*"]
+      "exclude": [
+        "apps/kafka-microservices-e2e/**/*",
+        "order-gateway-e2e/**/*",
+        "order-gateway-e2e/**/*",
+        "order-gateway-e2e/**/*",
+        "apps/order-gateway-e2e/**/*",
+        "apps/order-service-e2e/**/*",
+        "apps/notification-service-e2e/**/*",
+        "apps/logger-service-e2e/**/*"
+      ]
+    },
+    {
+      "plugin": "@nx/js/typescript",
+      "include": ["libs/shared/*"],
+      "options": {
+        "typecheck": {
+          "targetName": "typecheck"
+        }
+      }
     }
   ],
+  "generators": {
+    "@nx/nest": {
+      "application": {
+        "linter": "eslint",
+        "unitTestRunner": "jest"
+      },
+      "library": {
+        "linter": "eslint",
+        "unitTestRunner": "jest"
+      }
+    }
+  },
   "targetDefaults": {
     "test": {
       "dependsOn": ["^build"]

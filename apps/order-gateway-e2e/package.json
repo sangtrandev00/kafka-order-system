@@ -1,0 +1,27 @@
+{
+  "name": "@kafka-microservices/order-gateway-e2e",
+  "version": "0.0.1",
+  "private": true,
+  "nx": {
+    "name": "order-gateway-e2e",
+    "implicitDependencies": [
+      "order-gateway"
+    ],
+    "targets": {
+      "e2e": {
+        "executor": "@nx/jest:jest",
+        "outputs": [
+          "{projectRoot}/test-output/jest/coverage"
+        ],
+        "options": {
+          "jestConfig": "apps/order-gateway-e2e/jest.config.ts",
+          "passWithNoTests": true
+        },
+        "dependsOn": [
+          "order-gateway:build",
+          "order-gateway:serve"
+        ]
+      }
+    }
+  }
+}
