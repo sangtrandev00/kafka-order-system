@@ -1,0 +1,37 @@
+# Global variables (removed reserved names)
+project_name: kafka-microservices
+k8s_namespace: kafka-microservices
+
+# Environment-specific settings
+deployment_environments:
+  development:
+    replicas:
+      order_gateway: 1
+      order_service: 1
+      notification_service: 1
+      logger_service: 1
+  staging:
+    replicas:
+      order_gateway: 2
+      order_service: 2
+      notification_service: 1
+      logger_service: 1
+  production:
+    replicas:
+      order_gateway: 3
+      order_service: 3
+      notification_service: 2
+      logger_service: 2
+
+# Docker settings
+docker_registry: kafka-microservices
+image_tag: '{{ ansible_date_time.epoch }}'
+
+# Resource limits
+default_resources:
+  requests:
+    memory: '128Mi'
+    cpu: '125m'
+  limits:
+    memory: '256Mi'
+    cpu: '250m'

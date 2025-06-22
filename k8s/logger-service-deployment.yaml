@@ -1,0 +1,33 @@
+# k8s/logger-service-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: logger-service
+  namespace: kafka-microservices
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: logger-service
+  template:
+    metadata:
+      labels:
+        app: logger-service
+    spec:
+      containers:
+        - name: logger-service
+          image: kafka-microservices/logger-service:latest
+          imagePullPolicy: Never
+          env:
+            - name: KAFKA_BROKERS
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: KAFKA_BROKERS
+          resources:
+            requests:
+              memory: '128Mi'
+              cpu: '125m'
+            limits:
+              memory: '256Mi'
+              cpu: '250m'

@@ -1,0 +1,17 @@
+# k8s/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: kafka-microservices
+data:
+  DB_HOST: 'postgres-service'
+  DB_PORT: '5432'
+  DB_USERNAME: 'postgres'
+  DB_NAME: 'orders_db'
+  KAFKA_BROKERS: 'kafka-service:9092'
+  KAFKA_CLIENT_ID: 'kafka-microservices'
+  ORDER_GATEWAY_PORT: '3001'
+  ORDER_SERVICE_PORT: '3002'
+  NOTIFICATION_SERVICE_PORT: '3003'
+  LOGGER_SERVICE_PORT: '3004'

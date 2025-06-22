@@ -1,0 +1,10 @@
+replicas:
+  order_gateway: 1
+  order_service: 1
+  notification_service: 1
+  logger_service: 1
+
+resources:
+  small:
+    requests: { memory: '128Mi', cpu: '100m' }
+    limits: { memory: '256Mi', cpu: '200m' }

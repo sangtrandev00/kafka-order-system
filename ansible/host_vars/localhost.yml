@@ -1,0 +1,17 @@
+---
+# Local development settings
+environment: development
+debug_mode: true
+build_force: true
+
+# Minikube-specific settings
+minikube_memory: '8192'
+minikube_cpus: '4'
+minikube_disk_size: '20g'
+
+# Service replicas for development
+service_replicas:
+  order_gateway: 1
+  order_service: 1
+  notification_service: 1
+  logger_service: 1

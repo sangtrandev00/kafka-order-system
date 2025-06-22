@@ -1,0 +1,33 @@
+# k8s/notification-service-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notification-service
+  namespace: kafka-microservices
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notification-service
+  template:
+    metadata:
+      labels:
+        app: notification-service
+    spec:
+      containers:
+        - name: notification-service
+          image: kafka-microservices/notification-service:latest
+          imagePullPolicy: Never
+          env:
+            - name: KAFKA_BROKERS
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: KAFKA_BROKERS
+          resources:
+            requests:
+              memory: '128Mi'
+              cpu: '125m'
+            limits:
+              memory: '256Mi'
+              cpu: '250m'

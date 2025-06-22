@@ -1,0 +1,40 @@
+---
+- name: Wait for all pods to be ready
+  kubernetes.core.k8s_info:
+    api_version: v1
+    kind: Pod
+    namespace: '{{ namespace }}'
+    label_selectors:
+      - 'app={{ item.name }}'
+    wait: true
+    wait_condition:
+      type: Ready
+      status: 'True'
+    wait_timeout: 300
+  loop: '{{ services }}'
+
+- name: Check service endpoints
+  uri:
+    url: 'http://{{ minikube_ip }}/api'
+    method: GET
+    status_code: 200
+  register: health_check
+  retries: 5
+  delay: 10
+  until: health_check.status == 200
+
+- name: Test order creation
+  uri:
+    url: 'http://{{ minikube_ip }}/api/orders'
+    method: POST
+    body_format: json
+    body:
+      productId: 'ansible-test-product'
+      quantity: 1
+      userId: 'ansible-test-user'
+    status_code: 201
+  register: order_result
+
+- name: Verify order was created
+  debug:
+    msg: 'Order created successfully: {{ order_result.json.orderId }}'

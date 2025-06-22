@@ -1,0 +1,21 @@
+- name: Set Docker environment for Minikube
+  shell: |
+    eval $(minikube docker-env)
+    env | grep DOCKER
+  register: docker_env
+  changed_when: false
+
+- name: Build Docker images for each service
+  shell: |
+    eval $(minikube docker-env)
+    docker build -f apps/{{ item.name }}/Dockerfile -t {{ item.image }} .
+  args:
+    chdir: '{{ playbook_dir }}/..'
+  loop: '{{ app_services }}'
+  register: build_results
+
+- name: Display build results
+  debug:
+    msg: 'Built image: {{ item.item.image }}'
+  loop: '{{ build_results.results }}'
+  when: item.rc == 0

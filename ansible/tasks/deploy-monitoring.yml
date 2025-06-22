@@ -1,0 +1,60 @@
+---
+- name: Deploy Kafka UI
+  kubernetes.core.k8s:
+    definition:
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: kafka-ui
+        namespace: '{{ namespace }}'
+      spec:
+        replicas: 1
+        selector:
+          matchLabels:
+            app: kafka-ui
+        template:
+          metadata:
+            labels:
+              app: kafka-ui
+          spec:
+            containers:
+              - name: kafka-ui
+                image: provectuslabs/kafka-ui:latest
+                ports:
+                  - containerPort: 8080
+                env:
+                  - name: KAFKA_CLUSTERS_0_NAME
+                    value: 'local'
+                  - name: KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS
+                    value: 'kafka-service:9092'
+    state: present
+
+- name: Deploy Kafka UI Service
+  kubernetes.core.k8s:
+    definition:
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: kafka-ui-service
+        namespace: '{{ namespace }}'
+      spec:
+        selector:
+          app: kafka-ui
+        ports:
+          - protocol: TCP
+            port: 8080
+            targetPort: 8080
+        type: NodePort
+    state: present
+
+- name: Get Kafka UI access URL
+  kubernetes.core.k8s_info:
+    api_version: v1
+    kind: Service
+    name: kafka-ui-service
+    namespace: '{{ namespace }}'
+  register: kafka_ui_service
+
+- name: Display Kafka UI URL
+  debug:
+    msg: 'Kafka UI available at: http://{{ minikube_ip }}:{{ kafka_ui_service.resources[0].spec.ports[0].nodePort }}'

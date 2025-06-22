@@ -1,0 +1,98 @@
+- name: Deploy Kafka Microservices to Kubernetes
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  vars:
+    k8s_namespace: kafka-microservices # Changed from 'namespace'
+    deployment_environment: development # Changed from 'environment'
+    minikube_ip: '{{ ansible_env.MINIKUBE_IP | default(lookup(''pipe'', ''minikube ip 2>/dev/null || echo ""'')) }}'
+    app_services: # Changed from 'services'
+      - name: order-gateway
+        image: kafka-microservices/order-gateway:latest
+        port: 3000
+        replicas: 2
+      - name: order-service
+        image: kafka-microservices/order-service:latest
+        replicas: 2
+      - name: notification-service
+        image: kafka-microservices/notification-service:latest
+        replicas: 1
+      - name: logger-service
+        image: kafka-microservices/logger-service:latest
+        replicas: 1
+
+  pre_tasks:
+    - name: Check if Docker is running
+      command: docker info
+      register: docker_status
+      failed_when: false
+      changed_when: false
+
+    - name: Fail if Docker is not running
+      fail:
+        msg: |
+          Docker is not running. Please start Docker Desktop:
+          1. Open Docker Desktop application
+          2. Wait for it to fully start
+          3. Try again
+      when: docker_status.rc != 0
+
+    - name: Check if Minikube is running
+      command: minikube status
+      register: minikube_status
+      failed_when: false
+      changed_when: false
+
+    - name: Start Minikube if not running
+      command: minikube start --memory=8192 --cpus=4 --disk-size=20g
+      when: "'Running' not in minikube_status.stdout"
+      register: minikube_start
+      timeout: 600
+
+    - name: Wait for Minikube to be ready
+      command: kubectl cluster-info
+      register: cluster_info
+      retries: 10
+      delay: 5
+      until: cluster_info.rc == 0
+
+    - name: Get Minikube IP
+      command: minikube ip
+      register: minikube_ip_result
+      changed_when: false
+
+    - name: Set Minikube IP fact
+      set_fact:
+        minikube_ip: '{{ minikube_ip_result.stdout }}'
+
+  tasks:
+    - name: Configure Docker environment for Minikube
+      shell: eval $(minikube docker-env)
+      changed_when: false
+
+    - name: Build Docker images
+      include_tasks: tasks/build-images.yml
+
+    - name: Deploy infrastructure
+      include_tasks: tasks/deploy-infrastructure.yml
+
+    - name: Deploy microservices
+      include_tasks: tasks/deploy-microservices.yml
+
+    - name: Configure networking
+      include_tasks: tasks/deploy-networking.yml
+
+    - name: Setup monitoring
+      include_tasks: tasks/deploy-monitoring.yml
+
+    - name: Verify deployment
+      include_tasks: tasks/verify-deployment.yml
+
+    - name: Display access information
+      debug:
+        msg:
+          - '🚀 Deployment completed successfully!'
+          - '📱 Application URL: http://{{ minikube_ip }}'
+          - '📊 Add to /etc/hosts: {{ minikube_ip }} kafka-microservices.local'
+          - '🔍 Kafka UI: Available via NodePort'
+          - "📋 Dashboard: Run 'minikube dashboard'"

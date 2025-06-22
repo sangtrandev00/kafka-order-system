@@ -1,0 +1,15 @@
+replicas:
+  order_gateway: 3
+  order_service: 3
+  notification_service: 2
+  logger_service: 2
+
+resources:
+  large:
+    requests: { memory: '512Mi', cpu: '500m' }
+    limits: { memory: '1Gi', cpu: '1000m' }
+
+# Production-specific configurations
+image_pull_policy: Always
+enable_hpa: true
+enable_monitoring: true

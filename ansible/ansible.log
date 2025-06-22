@@ -1,0 +1,957 @@
+2025-06-21 21:10:05,576 p=32583 u=trannhatsang n=ansible WARNING| [WARNING]: Found both group and host with same name: minikube
+
+2025-06-21 21:10:05,939 p=32583 u=trannhatsang n=ansible WARNING| [WARNING]: Found variable using reserved name: namespace
+
+2025-06-21 21:10:05,945 p=32583 u=trannhatsang n=ansible INFO| [DEPRECATION WARNING]: community.general.yaml has been deprecated. The plugin has been superseded by the the option `result_format=yaml` in callback
+ plugin ansible.builtin.default from ansible-core 2.13 onwards. This feature will be removed from community.general in version 12.0.0. Deprecation 
+warnings can be disabled by setting deprecation_warnings=False in ansible.cfg.
+2025-06-21 21:10:05,971 p=32583 u=trannhatsang n=ansible INFO| PLAY [Deploy Kafka Microservices to Kubernetes] *****************************************************************************************************
+2025-06-21 21:10:05,995 p=32583 u=trannhatsang n=ansible WARNING| [WARNING]: Found variable using reserved name: environment
+
+2025-06-21 21:10:05,995 p=32583 u=trannhatsang n=ansible INFO| TASK [Check if Minikube is running] *****************************************************************************************************************
+2025-06-21 21:10:06,585 p=32583 u=trannhatsang n=ansible WARNING| [WARNING]: Platform darwin on host localhost is using the discovered Python interpreter at /opt/homebrew/bin/python3.13, but future installation of
+another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-06-21 21:10:06,586 p=32583 u=trannhatsang n=ansible INFO| fatal: [localhost]: FAILED! => changed=true 
+  ansible_facts:
+    discovered_interpreter_python: /opt/homebrew/bin/python3.13
+  cmd:
+  - minikube
+  - status
+  delta: '0:00:00.345002'
+  end: '2025-06-21 21:10:06.562563'
+  failed_when_result: true
+  msg: ''
+  rc: 0
+  start: '2025-06-21 21:10:06.217561'
+  stderr: |-
+    E0621 21:10:06.561586   32606 status.go:179] status error: host: state: unknown state "minikube": docker container inspect minikube --format={{.State.Status}}: exit status 1
+    stdout:
+  
+  
+    stderr:
+    Cannot connect to the Docker daemon at unix:///Users/trannhatsang/.docker/run/docker.sock. Is the docker daemon running?
+    E0621 21:10:06.561592   32606 status.go:126] status error: host: state: unknown state "minikube": docker container inspect minikube --format={{.State.Status}}: exit status 1
+    stdout:
+  
+  
+    stderr:
+    Cannot connect to the Docker daemon at unix:///Users/trannhatsang/.docker/run/docker.sock. Is the docker daemon running?
+  stderr_lines: <omitted>
+  stdout: ''
+  stdout_lines: <omitted>
+2025-06-21 21:10:06,587 p=32583 u=trannhatsang n=ansible INFO| PLAY RECAP ******************************************************************************************************************************************
+2025-06-21 21:10:06,587 p=32583 u=trannhatsang n=ansible INFO| localhost                  : ok=0    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2025-06-21 21:34:50,357 p=57885 u=trannhatsang n=ansible INFO| PLAY [Deploy Kafka Microservices to Kubernetes] **********************************************************************************************************
+2025-06-21 21:34:50,363 p=57885 u=trannhatsang n=ansible WARNING| [WARNING]: Found variable using reserved name: environment
+
+2025-06-21 21:34:50,363 p=57885 u=trannhatsang n=ansible INFO| TASK [Check if Docker is running] ************************************************************************************************************************
+2025-06-21 21:34:50,903 p=57885 u=trannhatsang n=ansible WARNING| [WARNING]: Platform darwin on host localhost is using the discovered Python interpreter at /opt/homebrew/bin/python3.13, but future installation of
+another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-06-21 21:34:50,904 p=57885 u=trannhatsang n=ansible INFO| ok: [localhost]
+2025-06-21 21:34:50,905 p=57885 u=trannhatsang n=ansible INFO| TASK [Fail if Docker is not running] *********************************************************************************************************************
+2025-06-21 21:34:50,914 p=57885 u=trannhatsang n=ansible INFO| skipping: [localhost]
+2025-06-21 21:34:50,915 p=57885 u=trannhatsang n=ansible INFO| TASK [Check if Minikube is running] **********************************************************************************************************************
+2025-06-21 21:34:51,652 p=57885 u=trannhatsang n=ansible INFO| ok: [localhost]
+2025-06-21 21:34:51,653 p=57885 u=trannhatsang n=ansible INFO| TASK [Start Minikube if not running] *********************************************************************************************************************
+2025-06-21 21:34:51,665 p=57885 u=trannhatsang n=ansible INFO| skipping: [localhost]
+2025-06-21 21:34:51,666 p=57885 u=trannhatsang n=ansible INFO| TASK [Wait for Minikube to be ready] *********************************************************************************************************************
+2025-06-21 21:34:51,970 p=57885 u=trannhatsang n=ansible INFO| changed: [localhost]
+2025-06-21 21:34:51,971 p=57885 u=trannhatsang n=ansible INFO| TASK [Get Minikube IP] ***********************************************************************************************************************************
+2025-06-21 21:34:52,261 p=57885 u=trannhatsang n=ansible INFO| ok: [localhost]
+2025-06-21 21:34:52,263 p=57885 u=trannhatsang n=ansible INFO| TASK [Set Minikube IP fact] ******************************************************************************************************************************
+2025-06-21 21:34:52,271 p=57885 u=trannhatsang n=ansible INFO| ok: [localhost]
+2025-06-21 21:34:52,273 p=57885 u=trannhatsang n=ansible INFO| TASK [Configure Docker environment for Minikube] *********************************************************************************************************
+2025-06-21 21:34:52,825 p=57885 u=trannhatsang n=ansible INFO| ok: [localhost]
+2025-06-21 21:34:52,827 p=57885 u=trannhatsang n=ansible INFO| TASK [Build Docker images] *******************************************************************************************************************************
+2025-06-21 21:34:52,835 p=57885 u=trannhatsang n=ansible INFO| included: /Users/trannhatsang/Documents/Programming/Kafka/kafka-microservices/ansible/tasks/build-images.yml for localhost
+2025-06-21 21:34:52,836 p=57885 u=trannhatsang n=ansible INFO| TASK [Set Docker environment for Minikube] ***************************************************************************************************************
+2025-06-21 21:34:53,548 p=57885 u=trannhatsang n=ansible INFO| ok: [localhost]
+2025-06-21 21:34:53,549 p=57885 u=trannhatsang n=ansible INFO| TASK [Build Docker images for each service] **************************************************************************************************************
+2025-06-21 21:35:23,408 p=57885 u=trannhatsang n=ansible INFO| failed: [localhost] (item={'name': 'order-gateway', 'image': 'kafka-microservices/order-gateway:latest', 'port': 3000, 'replicas': 2}) => changed=true 
+  ansible_loop_var: item
+  cmd: |-
+    eval $(minikube docker-env)
+    docker build -f apps/order-gateway/Dockerfile -t kafka-microservices/order-gateway:latest .
+  delta: '0:00:29.681467'
+  end: '2025-06-21 21:35:23.375354'
+  item:
+    image: kafka-microservices/order-gateway:latest
+    name: order-gateway
+    port: 3000
+    replicas: 2
+  msg: non-zero return code
+  rc: 1
+  start: '2025-06-21 21:34:53.693887'
+  stderr: |-
+    #0 building with "default" instance using docker driver
+  
+    #1 [internal] load build definition from dockerfile
+    #1 transferring dockerfile: 417B done
+    #1 DONE 0.0s
+  
+    #2 [internal] load metadata for docker.io/library/node:18-alpine
+    #2 DONE 2.2s
+  
+    #3 [internal] load .dockerignore
+    #3 transferring context: 2B done
+    #3 DONE 0.0s
+  
+    #4 [build 1/5] FROM docker.io/library/node:18-alpine@sha256:8d6421d663b4c28fd3ebc498332f249011d118945588d0a35cb9bc4b8ca09d9e
+    #4 DONE 0.0s
+  
+    #5 [build 2/5] WORKDIR /app
+    #5 CACHED
+  
+    #6 [internal] load build context
+    #6 transferring context: 275.36MB 5.2s
+    #6 transferring context: 388.63MB 7.7s done
+    #6 DONE 7.8s
+  
+    #7 [build 3/5] COPY . .
+    #7 ...
+  
+    #8 [base 3/4] COPY package*.json ./
+    #8 DONE 1.2s
+  
+    #9 [base 4/4] RUN npm ci --only=production && npm cache clean --force
+    #9 0.502 npm warn config only Use `--omit=dev` to omit dev dependencies from the install.
+    #9 ...
+  
+    #7 [build 3/5] COPY . .
+    #7 DONE 5.6s
+  
+    #10 [build 4/5] RUN npm ci
+    #10 13.10 npm warn EBADENGINE Unsupported engine {
+    #10 13.10 npm warn EBADENGINE   package: '@nestjs/core@11.1.3',
+    #10 13.10 npm warn EBADENGINE   required: { node: '>= 20' },
+    #10 13.10 npm warn EBADENGINE   current: { node: 'v18.20.8', npm: '10.8.2' }
+    #10 13.10 npm warn EBADENGINE }
+    #10 13.10 npm warn EBADENGINE Unsupported engine {
+    #10 13.10 npm warn EBADENGINE   package: 'file-type@21.0.0',
+    #10 13.10 npm warn EBADENGINE   required: { node: '>=20' },
+    #10 13.10 npm warn EBADENGINE   current: { node: 'v18.20.8', npm: '10.8.2' }
+    #10 13.10 npm warn EBADENGINE }
+    #10 13.13 npm error code EUSAGE
+    #10 ...
+  
+    #9 [base 4/4] RUN npm ci --only=production && npm cache clean --force
+    #9 17.28 npm warn EBADENGINE Unsupported engine {
+    #9 17.28 npm warn EBADENGINE   package: '@nestjs/core@11.1.3',
+    #9 17.28 npm warn EBADENGINE   required: { node: '>= 20' },
+    #9 17.28 npm warn EBADENGINE   current: { node: 'v18.20.8', npm: '10.8.2' }
+    #9 17.28 npm warn EBADENGINE }
+    #9 17.29 npm warn EBADENGINE Unsupported engine {
+    #9 17.29 npm warn EBADENGINE   package: 'file-type@21.0.0',
+    #9 17.29 npm warn EBADENGINE   required: { node: '>=20' },
+    #9 17.29 npm warn EBADENGINE   current: { node: 'v18.20.8', npm: '10.8.2' }
+    #9 17.29 npm warn EBADENGINE }
+    #9 17.31 npm error code EUSAGE
+    #9 17.31 npm error
+    #9 17.31 npm error `npm ci` can only install packages when your package.json and package-lock.json or npm-shrinkwrap.json are in sync. Please update your lock file with `npm install` before continuing.
+    #9 17.31 npm error
+    #9 17.31 npm error Missing: @nestjs/config@4.0.2 from lock file
+    #9 17.31 npm error Missing: @nestjs/microservices@11.1.3 from lock file
+    #9 17.31 npm error Missing: @nestjs/typeorm@11.0.0 from lock file
+    #9 17.31 npm error Missing: typeorm@0.3.25 from lock file
+    #9 17.31 npm error Missing: @types/pg@8.15.4 from lock file
+    #9 17.31 npm error Missing: class-transformer@0.5.1 from lock file
+    #9 17.31 npm error Missing: class-validator@0.14.2 from lock file
+    #9 17.31 npm error Missing: concurrently@9.1.2 from lock file
+    #9 17.31 npm error Missing: kafkajs@2.2.4 from lock file
+    #9 17.31 npm error Missing: pg@8.16.2 from lock file
+    #9 17.31 npm error Invalid: lock file's uuid@8.3.2 does not satisfy uuid@11.1.0
+    #9 17.31 npm error Invalid: lock file's chokidar@3.6.0 does not satisfy chokidar@4.0.3
+    #9 17.31 npm error Missing: dotenv-expand@12.0.1 from lock file
+    #9 17.31 npm error Missing: lodash@4.17.21 from lock file
+    #9 17.31 npm error Missing: pg-protocol@1.10.2 from lock file
+    #9 17.31 npm error Missing: pg-types@2.2.0 from lock file
+    #9 17.31 npm error Invalid: lock file's readdirp@3.6.0 does not satisfy readdirp@4.1.2
+    #9 17.31 npm error Missing: @types/validator@13.15.2 from lock file
+    #9 17.31 npm error Missing: libphonenumber-js@1.12.9 from lock file
+    #9 17.31 npm error Missing: validator@13.15.15 from lock file
+    #9 17.31 npm error Missing: supports-color@8.1.1 from lock file
+    #9 17.31 npm error Missing: chokidar@3.6.0 from lock file
+    #9 17.31 npm error Missing: pg-cloudflare@1.2.6 from lock file
+    #9 17.31 npm error Missing: pg-connection-string@2.9.1 from lock file
+    #9 17.31 npm error Missing: pg-pool@3.10.1 from lock file
+    #9 17.31 npm error Missing: pgpass@1.0.5 from lock file
+    #9 17.31 npm error Missing: pg-int8@1.0.1 from lock file
+    #9 17.31 npm error Missing: postgres-array@2.0.0 from lock file
+    #9 17.31 npm error Missing: postgres-bytea@1.0.0 from lock file
+    #9 17.31 npm error Missing: postgres-date@1.0.7 from lock file
+    #9 17.31 npm error Missing: postgres-interval@1.2.0 from lock file
+    #9 17.31 npm error Missing: split2@4.2.0 from lock file
+    #9 17.31 npm error Missing: uuid@8.3.2 from lock file
+    #9 17.31 npm error Missing: @sqltools/formatter@1.2.5 from lock file
+    #9 17.31 npm error Missing: ansis@3.17.0 from lock file
+    #9 17.31 npm error Missing: app-root-path@3.1.0 from lock file
+    #9 17.31 npm error Missing: buffer@6.0.3 from lock file
+    #9 17.31 npm error Missing: dayjs@1.11.13 from lock file
+    #9 17.31 npm error Missing: glob@10.4.5 from lock file
+    #9 17.31 npm error Missing: sha.js@2.4.11 from lock file
+    #9 17.31 npm error Missing: sql-highlight@6.1.0 from lock file
+    #9 17.31 npm error Missing: chokidar@3.6.0 from lock file
+    #9 17.31 npm error Missing: glob-parent@5.1.2 from lock file
+    #9 17.31 npm error Missing: readdirp@3.6.0 from lock file
+    #9 17.31 npm error Missing: picomatch@2.3.1 from lock file
+    #9 17.31 npm error Missing: minimatch@9.0.5 from lock file
+    #9 17.31 npm error Missing: glob-parent@5.1.2 from lock file
+    #9 17.31 npm error Missing: readdirp@3.6.0 from lock file
+    #9 17.31 npm error Missing: picomatch@2.3.1 from lock file
+    #9 17.31 npm error
+    #9 17.31 npm error Clean install a project
+    #9 17.31 npm error
+    #9 17.31 npm error Usage:
+    #9 17.31 npm error npm ci
+    #9 17.31 npm error
+    #9 17.31 npm error Options:
+    #9 17.31 npm error [--install-strategy <hoisted|nested|shallow|linked>] [--legacy-bundling]
+    #9 17.31 npm error [--global-style] [--omit <dev|optional|peer> [--omit <dev|optional|peer> ...]]
+    #9 17.31 npm error [--include <prod|dev|optional|peer> [--include <prod|dev|optional|peer> ...]]
+    #9 17.31 npm error [--strict-peer-deps] [--foreground-scripts] [--ignore-scripts] [--no-audit]
+    #9 17.31 npm error [--no-bin-links] [--no-fund] [--dry-run]
+    #9 17.31 npm error [-w|--workspace <workspace-name> [-w|--workspace <workspace-name> ...]]
+    #9 17.31 npm error [-ws|--workspaces] [--include-workspace-root] [--install-links]
+    #9 17.31 npm error
+    #9 17.31 npm error aliases: clean-install, ic, install-clean, isntall-clean
+    #9 17.31 npm error
+    #9 17.31 npm error Run "npm help ci" for more info
+    #9 17.31 npm notice
+    #9 17.31 npm notice New major version of npm available! 10.8.2 -> 11.4.2
+    #9 17.31 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.4.2
+    #9 17.31 npm notice To update run: npm install -g npm@11.4.2
+    #9 17.31 npm notice
+    #9 17.31 npm error A complete log of this run can be found in: /root/.npm/_logs/2025-06-21T14_35_06_338Z-debug-0.log
+    #9 ERROR: process "/bin/sh -c npm ci --only=production && npm cache clean --force" did not complete successfully: exit code: 1
+  
+    #10 [build 4/5] RUN npm ci
+    #10 13.13 npm error
+    #10 13.13 npm error `npm ci` can only install packages when your package.json and package-lock.json or npm-shrinkwrap.json are in sync. Please update your lock file with `npm install` before continuing.
+    #10 13.13 npm error
+    #10 13.13 npm error Missing: @kafka-microservices/logger-service@0.0.1 from lock file
+    #10 13.13 npm error Missing: @kafka-microservices/logger-service@0.0.1 from lock file
+    #10 13.13 npm error Missing: @kafka-microservices/logger-service-e2e@0.0.1 from lock file
+    #10 13.13 npm error Missing: @kafka-microservices/logger-service-e2e@0.0.1 from lock file
+    #10 13.13 npm error Missing: @kafka-microservices/notification-service@0.0.1 from lock file
+    #10 13.13 npm error Missing: @kafka-microservices/notification-service@0.0.1 from lock file
+    #10 13.13 npm error Missing: @kafka-microservices/notification-service-e2e@0.0.1 from lock file
+    #10 13.13 npm error Missing: @kafka-microservices/notification-service-e2e@0.0.1 from lock file
+    #10 13.13 npm error Missing: @kafka-microservices/order-gateway@0.0.1 from lock file
+    #10 13.13 npm error Missing: @kafka-microservices/order-gateway@0.0.1 from lock file
+    #10 13.13 npm error Missing: @kafka-microservices/order-gateway-e2e@0.0.1 from lock file
+    #10 13.13 npm error Missing: @kafka-microservices/order-gateway-e2e@0.0.1 from lock file
+    #10 13.13 npm error Missing: @kafka-microservices/order-service@0.0.1 from lock file
+    #10 13.13 npm error Missing: @kafka-microservices/order-service@0.0.1 from lock file
+    #10 13.13 npm error Missing: @kafka-microservices/order-service-e2e@0.0.1 from lock file
+    #10 13.13 npm error Missing: @kafka-microservices/order-service-e2e@0.0.1 from lock file
+    #10 13.13 npm error Missing: @kafka-microservices/shared@0.0.1 from lock file
+    #10 13.13 npm error Missing: @kafka-microservices/shared@0.0.1 from lock file
+    #10 13.13 npm error Missing: @nestjs/config@4.0.2 from lock file
+    #10 13.13 npm error Missing: @nestjs/microservices@11.1.3 from lock file
+    #10 13.13 npm error Missing: @nestjs/typeorm@11.0.0 from lock file
+    #10 13.13 npm error Missing: typeorm@0.3.25 from lock file
+    #10 13.13 npm error Missing: @types/pg@8.15.4 from lock file
+    #10 13.13 npm error Missing: class-transformer@0.5.1 from lock file
+    #10 13.13 npm error Missing: class-validator@0.14.2 from lock file
+    #10 13.13 npm error Missing: concurrently@9.1.2 from lock file
+    #10 13.13 npm error Missing: kafkajs@2.2.4 from lock file
+    #10 13.13 npm error Missing: pg@8.16.2 from lock file
+    #10 13.13 npm error Invalid: lock file's uuid@8.3.2 does not satisfy uuid@11.1.0
+    #10 13.13 npm error Invalid: lock file's chokidar@3.6.0 does not satisfy chokidar@4.0.3
+    #10 13.13 npm error Missing: dotenv-expand@12.0.1 from lock file
+    #10 13.13 npm error Missing: lodash@4.17.21 from lock file
+    #10 13.13 npm error Missing: pg-protocol@1.10.2 from lock file
+    #10 13.13 npm error Missing: pg-types@2.2.0 from lock file
+    #10 13.13 npm error Invalid: lock file's readdirp@3.6.0 does not satisfy readdirp@4.1.2
+    #10 13.13 npm error Missing: @types/validator@13.15.2 from lock file
+    #10 13.13 npm error Missing: libphonenumber-js@1.12.9 from lock file
+    #10 13.13 npm error Missing: validator@13.15.15 from lock file
+    #10 13.13 npm error Missing: supports-color@8.1.1 from lock file
+    #10 13.13 npm error Missing: chokidar@3.6.0 from lock file
+    #10 13.13 npm error Missing: pg-cloudflare@1.2.6 from lock file
+    #10 13.13 npm error Missing: pg-connection-string@2.9.1 from lock file
+    #10 13.13 npm error Missing: pg-pool@3.10.1 from lock file
+    #10 13.13 npm error Missing: pgpass@1.0.5 from lock file
+    #10 13.13 npm error Missing: pg-int8@1.0.1 from lock file
+    #10 13.13 npm error Missing: postgres-array@2.0.0 from lock file
+    #10 13.13 npm error Missing: postgres-bytea@1.0.0 from lock file
+    #10 13.13 npm error Missing: postgres-date@1.0.7 from lock file
+    #10 13.13 npm error Missing: postgres-interval@1.2.0 from lock file
+    #10 13.13 npm error Missing: split2@4.2.0 from lock file
+    #10 13.13 npm error Missing: uuid@8.3.2 from lock file
+    #10 13.13 npm error Missing: @sqltools/formatter@1.2.5 from lock file
+    #10 13.13 npm error Missing: ansis@3.17.0 from lock file
+    #10 13.13 npm error Missing: app-root-path@3.1.0 from lock file
+    #10 13.13 npm error Missing: buffer@6.0.3 from lock file
+    #10 13.13 npm error Missing: dayjs@1.11.13 from lock file
+    #10 13.13 npm error Missing: glob@10.4.5 from lock file
+    #10 13.13 npm error Missing: sha.js@2.4.11 from lock file
+    #10 13.13 npm error Missing: sql-highlight@6.1.0 from lock file
+    #10 13.13 npm error Missing: chokidar@3.6.0 from lock file
+    #10 13.13 npm error Missing: glob-parent@5.1.2 from lock file
+    #10 13.13 npm error Missing: readdirp@3.6.0 from lock file
+    #10 13.13 npm error Missing: picomatch@2.3.1 from lock file
+    #10 13.13 npm error Missing: minimatch@9.0.5 from lock file
+    #10 13.13 npm error Missing: glob-parent@5.1.2 from lock file
+    #10 13.13 npm error Missing: readdirp@3.6.0 from lock file
+    #10 13.13 npm error Missing: picomatch@2.3.1 from lock file
+    #10 13.13 npm error
+    #10 13.13 npm error Clean install a project
+    #10 13.13 npm error
+    #10 13.13 npm error Usage:
+    #10 13.13 npm error npm ci
+    #10 13.13 npm error
+    #10 13.13 npm error Options:
+    #10 13.13 npm error [--install-strategy <hoisted|nested|shallow|linked>] [--legacy-bundling]
+    #10 13.13 npm error [--global-style] [--omit <dev|optional|peer> [--omit <dev|optional|peer> ...]]
+    #10 13.13 npm error [--include <prod|dev|optional|peer> [--include <prod|dev|optional|peer> ...]]
+    #10 13.13 npm error [--strict-peer-deps] [--foreground-scripts] [--ignore-scripts] [--no-audit]
+    #10 13.13 npm error [--no-bin-links] [--no-fund] [--dry-run]
+    #10 13.13 npm error [-w|--workspace <workspace-name> [-w|--workspace <workspace-name> ...]]
+    #10 13.13 npm error [-ws|--workspaces] [--include-workspace-root] [--install-links]
+    #10 13.13 npm error
+    #10 13.13 npm error aliases: clean-install, ic, install-clean, isntall-clean
+    #10 13.13 npm error
+    #10 13.13 npm error Run "npm help ci" for more info
+    #10 13.13 npm notice
+    #10 13.13 npm notice New major version of npm available! 10.8.2 -> 11.4.2
+    #10 13.13 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.4.2
+    #10 13.13 npm notice To update run: npm install -g npm@11.4.2
+    #10 13.13 npm notice
+    #10 13.13 npm error A complete log of this run can be found in: /root/.npm/_logs/2025-06-21T14_35_10_267Z-debug-0.log
+    #10 ERROR: process "/bin/sh -c npm ci" did not complete successfully: exit code: 1
+    ------
+     > [base 4/4] RUN npm ci --only=production && npm cache clean --force:
+    17.31 npm error
+    17.31 npm error aliases: clean-install, ic, install-clean, isntall-clean
+    17.31 npm error
+    17.31 npm error Run "npm help ci" for more info
+    17.31 npm notice
+    17.31 npm notice New major version of npm available! 10.8.2 -> 11.4.2
+    17.31 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.4.2
+    17.31 npm notice To update run: npm install -g npm@11.4.2
+    17.31 npm notice
+    17.31 npm error A complete log of this run can be found in: /root/.npm/_logs/2025-06-21T14_35_06_338Z-debug-0.log
+    ------
+    ------
+     > [build 4/5] RUN npm ci:
+    13.13 npm error
+    13.13 npm error aliases: clean-install, ic, install-clean, isntall-clean
+    13.13 npm error
+    13.13 npm error Run "npm help ci" for more info
+    13.13 npm notice
+    13.13 npm notice New major version of npm available! 10.8.2 -> 11.4.2
+    13.13 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.4.2
+    13.13 npm notice To update run: npm install -g npm@11.4.2
+    13.13 npm notice
+    13.13 npm error A complete log of this run can be found in: /root/.npm/_logs/2025-06-21T14_35_10_267Z-debug-0.log
+    ------
+    dockerfile:4
+    --------------------
+       2 |     WORKDIR /app
+       3 |     COPY package*.json ./
+       4 | >>> RUN npm ci --only=production && npm cache clean --force
+       5 |
+       6 |     FROM node:18-alpine AS build
+    --------------------
+    ERROR: failed to solve: process "/bin/sh -c npm ci --only=production && npm cache clean --force" did not complete successfully: exit code: 1
+  stderr_lines: <omitted>
+  stdout: ''
+  stdout_lines: <omitted>
+2025-06-21 21:35:38,496 p=57885 u=trannhatsang n=ansible INFO| failed: [localhost] (item={'name': 'order-service', 'image': 'kafka-microservices/order-service:latest', 'replicas': 2}) => changed=true 
+  ansible_loop_var: item
+  cmd: |-
+    eval $(minikube docker-env)
+    docker build -f apps/order-service/Dockerfile -t kafka-microservices/order-service:latest .
+  delta: '0:00:14.909723'
+  end: '2025-06-21 21:35:38.470160'
+  item:
+    image: kafka-microservices/order-service:latest
+    name: order-service
+    replicas: 2
+  msg: non-zero return code
+  rc: 1
+  start: '2025-06-21 21:35:23.560437'
+  stderr: |-
+    #0 building with "default" instance using docker driver
+  
+    #1 [internal] load build definition from dockerfile
+    #1 transferring dockerfile: 405B done
+    #1 DONE 0.0s
+  
+    #2 [internal] load metadata for docker.io/library/node:18-alpine
+    #2 DONE 1.1s
+  
+    #3 [internal] load .dockerignore
+    #3 transferring context: 2B done
+    #3 DONE 0.0s
+  
+    #4 [build 1/5] FROM docker.io/library/node:18-alpine@sha256:8d6421d663b4c28fd3ebc498332f249011d118945588d0a35cb9bc4b8ca09d9e
+    #4 DONE 0.0s
+  
+    #5 [internal] load build context
+    #5 transferring context: 3.87MB 1.1s done
+    #5 DONE 1.2s
+  
+    #6 [build 2/5] WORKDIR /app
+    #6 CACHED
+  
+    #7 [base 3/4] COPY package*.json ./
+    #7 CACHED
+  
+    #8 [base 4/4] RUN npm ci --only=production && npm cache clean --force
+    #8 0.301 npm warn config only Use `--omit=dev` to omit dev dependencies from the install.
+    #8 ...
+  
+    #9 [build 3/5] COPY . .
+    #9 DONE 4.8s
+  
+    #10 [build 4/5] RUN npm ci
+    #10 ...
+  
+    #8 [base 4/4] RUN npm ci --only=production && npm cache clean --force
+    #8 11.42 npm warn EBADENGINE Unsupported engine {
+    #8 11.42 npm warn EBADENGINE   package: '@nestjs/core@11.1.3',
+    #8 11.42 npm warn EBADENGINE   required: { node: '>= 20' },
+    #8 11.42 npm warn EBADENGINE   current: { node: 'v18.20.8', npm: '10.8.2' }
+    #8 11.42 npm warn EBADENGINE }
+    #8 11.42 npm warn EBADENGINE Unsupported engine {
+    #8 11.42 npm warn EBADENGINE   package: 'file-type@21.0.0',
+    #8 11.42 npm warn EBADENGINE   required: { node: '>=20' },
+    #8 11.42 npm warn EBADENGINE   current: { node: 'v18.20.8', npm: '10.8.2' }
+    #8 11.42 npm warn EBADENGINE }
+    #8 11.43 npm error code EUSAGE
+    #8 11.43 npm error
+    #8 11.43 npm error `npm ci` can only install packages when your package.json and package-lock.json or npm-shrinkwrap.json are in sync. Please update your lock file with `npm install` before continuing.
+    #8 11.43 npm error
+    #8 11.43 npm error Missing: @nestjs/config@4.0.2 from lock file
+    #8 11.43 npm error Missing: @nestjs/microservices@11.1.3 from lock file
+    #8 11.43 npm error Missing: @nestjs/typeorm@11.0.0 from lock file
+    #8 11.43 npm error Missing: typeorm@0.3.25 from lock file
+    #8 11.43 npm error Missing: @types/pg@8.15.4 from lock file
+    #8 11.43 npm error Missing: class-transformer@0.5.1 from lock file
+    #8 11.43 npm error Missing: class-validator@0.14.2 from lock file
+    #8 11.43 npm error Missing: concurrently@9.1.2 from lock file
+    #8 11.43 npm error Missing: kafkajs@2.2.4 from lock file
+    #8 11.43 npm error Missing: pg@8.16.2 from lock file
+    #8 11.43 npm error Invalid: lock file's uuid@8.3.2 does not satisfy uuid@11.1.0
+    #8 11.43 npm error Invalid: lock file's chokidar@3.6.0 does not satisfy chokidar@4.0.3
+    #8 11.43 npm error Missing: dotenv-expand@12.0.1 from lock file
+    #8 11.43 npm error Missing: lodash@4.17.21 from lock file
+    #8 11.43 npm error Missing: pg-protocol@1.10.2 from lock file
+    #8 11.43 npm error Missing: pg-types@2.2.0 from lock file
+    #8 11.43 npm error Invalid: lock file's readdirp@3.6.0 does not satisfy readdirp@4.1.2
+    #8 11.43 npm error Missing: @types/validator@13.15.2 from lock file
+    #8 11.43 npm error Missing: libphonenumber-js@1.12.9 from lock file
+    #8 11.43 npm error Missing: validator@13.15.15 from lock file
+    #8 11.43 npm error Missing: supports-color@8.1.1 from lock file
+    #8 11.43 npm error Missing: chokidar@3.6.0 from lock file
+    #8 11.43 npm error Missing: pg-cloudflare@1.2.6 from lock file
+    #8 11.43 npm error Missing: pg-connection-string@2.9.1 from lock file
+    #8 11.43 npm error Missing: pg-pool@3.10.1 from lock file
+    #8 11.43 npm error Missing: pgpass@1.0.5 from lock file
+    #8 11.43 npm error Missing: pg-int8@1.0.1 from lock file
+    #8 11.43 npm error Missing: postgres-array@2.0.0 from lock file
+    #8 11.43 npm error Missing: postgres-bytea@1.0.0 from lock file
+    #8 11.43 npm error Missing: postgres-date@1.0.7 from lock file
+    #8 11.43 npm error Missing: postgres-interval@1.2.0 from lock file
+    #8 11.43 npm error Missing: split2@4.2.0 from lock file
+    #8 11.43 npm error Missing: uuid@8.3.2 from lock file
+    #8 11.43 npm error Missing: @sqltools/formatter@1.2.5 from lock file
+    #8 11.43 npm error Missing: ansis@3.17.0 from lock file
+    #8 11.43 npm error Missing: app-root-path@3.1.0 from lock file
+    #8 11.43 npm error Missing: buffer@6.0.3 from lock file
+    #8 11.43 npm error Missing: dayjs@1.11.13 from lock file
+    #8 11.43 npm error Missing: glob@10.4.5 from lock file
+    #8 11.43 npm error Missing: sha.js@2.4.11 from lock file
+    #8 11.43 npm error Missing: sql-highlight@6.1.0 from lock file
+    #8 11.43 npm error Missing: chokidar@3.6.0 from lock file
+    #8 11.43 npm error Missing: glob-parent@5.1.2 from lock file
+    #8 11.43 npm error Missing: readdirp@3.6.0 from lock file
+    #8 11.43 npm error Missing: picomatch@2.3.1 from lock file
+    #8 11.43 npm error Missing: minimatch@9.0.5 from lock file
+    #8 11.43 npm error Missing: glob-parent@5.1.2 from lock file
+    #8 11.43 npm error Missing: readdirp@3.6.0 from lock file
+    #8 11.43 npm error Missing: picomatch@2.3.1 from lock file
+    #8 11.43 npm error
+    #8 11.43 npm error Clean install a project
+    #8 11.43 npm error
+    #8 11.43 npm error Usage:
+    #8 11.43 npm error npm ci
+    #8 11.43 npm error
+    #8 11.43 npm error Options:
+    #8 11.43 npm error [--install-strategy <hoisted|nested|shallow|linked>] [--legacy-bundling]
+    #8 11.43 npm error [--global-style] [--omit <dev|optional|peer> [--omit <dev|optional|peer> ...]]
+    #8 11.43 npm error [--include <prod|dev|optional|peer> [--include <prod|dev|optional|peer> ...]]
+    #8 11.43 npm error [--strict-peer-deps] [--foreground-scripts] [--ignore-scripts] [--no-audit]
+    #8 11.43 npm error [--no-bin-links] [--no-fund] [--dry-run]
+    #8 11.43 npm error [-w|--workspace <workspace-name> [-w|--workspace <workspace-name> ...]]
+    #8 11.43 npm error [-ws|--workspaces] [--include-workspace-root] [--install-links]
+    #8 11.43 npm error
+    #8 11.43 npm error aliases: clean-install, ic, install-clean, isntall-clean
+    #8 11.43 npm error
+    #8 11.43 npm error Run "npm help ci" for more info
+    #8 11.43 npm notice
+    #8 11.43 npm notice New major version of npm available! 10.8.2 -> 11.4.2
+    #8 11.43 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.4.2
+    #8 11.43 npm notice To update run: npm install -g npm@11.4.2
+    #8 11.43 npm notice
+    #8 11.43 npm error A complete log of this run can be found in: /root/.npm/_logs/2025-06-21T14_35_27_108Z-debug-0.log
+    #8 ERROR: process "/bin/sh -c npm ci --only=production && npm cache clean --force" did not complete successfully: exit code: 1
+  
+    #10 [build 4/5] RUN npm ci
+    #10 CANCELED
+    ------
+     > [base 4/4] RUN npm ci --only=production && npm cache clean --force:
+    11.43 npm error
+    11.43 npm error aliases: clean-install, ic, install-clean, isntall-clean
+    11.43 npm error
+    11.43 npm error Run "npm help ci" for more info
+    11.43 npm notice
+    11.43 npm notice New major version of npm available! 10.8.2 -> 11.4.2
+    11.43 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.4.2
+    11.43 npm notice To update run: npm install -g npm@11.4.2
+    11.43 npm notice
+    11.43 npm error A complete log of this run can be found in: /root/.npm/_logs/2025-06-21T14_35_27_108Z-debug-0.log
+    ------
+    dockerfile:4
+    --------------------
+       2 |     WORKDIR /app
+       3 |     COPY package*.json ./
+       4 | >>> RUN npm ci --only=production && npm cache clean --force
+       5 |
+       6 |     FROM node:18-alpine AS build
+    --------------------
+    ERROR: failed to solve: process "/bin/sh -c npm ci --only=production && npm cache clean --force" did not complete successfully: exit code: 1
+  stderr_lines: <omitted>
+  stdout: ''
+  stdout_lines: <omitted>
+2025-06-21 21:35:52,785 p=57885 u=trannhatsang n=ansible INFO| failed: [localhost] (item={'name': 'notification-service', 'image': 'kafka-microservices/notification-service:latest', 'replicas': 1}) => changed=true 
+  ansible_loop_var: item
+  cmd: |-
+    eval $(minikube docker-env)
+    docker build -f apps/notification-service/Dockerfile -t kafka-microservices/notification-service:latest .
+  delta: '0:00:14.126467'
+  end: '2025-06-21 21:35:52.755307'
+  item:
+    image: kafka-microservices/notification-service:latest
+    name: notification-service
+    replicas: 1
+  msg: non-zero return code
+  rc: 1
+  start: '2025-06-21 21:35:38.628840'
+  stderr: |-
+    #0 building with "default" instance using docker driver
+  
+    #1 [internal] load build definition from dockerfile
+    #1 transferring dockerfile: 419B done
+    #1 DONE 0.0s
+  
+    #2 [internal] load metadata for docker.io/library/node:18-alpine
+    #2 DONE 1.0s
+  
+    #3 [internal] load .dockerignore
+    #3 transferring context: 2B done
+    #3 DONE 0.0s
+  
+    #4 [build 1/5] FROM docker.io/library/node:18-alpine@sha256:8d6421d663b4c28fd3ebc498332f249011d118945588d0a35cb9bc4b8ca09d9e
+    #4 DONE 0.0s
+  
+    #5 [internal] load build context
+    #5 transferring context: 3.88MB 1.3s done
+    #5 DONE 1.3s
+  
+    #6 [base 3/4] COPY package*.json ./
+    #6 CACHED
+  
+    #7 [build 2/5] WORKDIR /app
+    #7 CACHED
+  
+    #8 [build 3/5] COPY . .
+    #8 DONE 5.6s
+  
+    #9 [build 4/5] RUN npm ci
+    #9 ...
+  
+    #10 [base 4/4] RUN npm ci --only=production && npm cache clean --force
+    #10 0.368 npm warn config only Use `--omit=dev` to omit dev dependencies from the install.
+    #10 10.64 npm warn EBADENGINE Unsupported engine {
+    #10 10.64 npm warn EBADENGINE   package: '@nestjs/core@11.1.3',
+    #10 10.64 npm warn EBADENGINE   required: { node: '>= 20' },
+    #10 10.64 npm warn EBADENGINE   current: { node: 'v18.20.8', npm: '10.8.2' }
+    #10 10.64 npm warn EBADENGINE }
+    #10 10.65 npm warn EBADENGINE Unsupported engine {
+    #10 10.65 npm warn EBADENGINE   package: 'file-type@21.0.0',
+    #10 10.65 npm warn EBADENGINE   required: { node: '>=20' },
+    #10 10.65 npm warn EBADENGINE   current: { node: 'v18.20.8', npm: '10.8.2' }
+    #10 10.65 npm warn EBADENGINE }
+    #10 10.66 npm error code EUSAGE
+    #10 10.66 npm error
+    #10 10.66 npm error `npm ci` can only install packages when your package.json and package-lock.json or npm-shrinkwrap.json are in sync. Please update your lock file with `npm install` before continuing.
+    #10 10.66 npm error
+    #10 10.66 npm error Missing: @nestjs/config@4.0.2 from lock file
+    #10 10.66 npm error Missing: @nestjs/microservices@11.1.3 from lock file
+    #10 10.66 npm error Missing: @nestjs/typeorm@11.0.0 from lock file
+    #10 10.66 npm error Missing: typeorm@0.3.25 from lock file
+    #10 10.66 npm error Missing: @types/pg@8.15.4 from lock file
+    #10 10.66 npm error Missing: class-transformer@0.5.1 from lock file
+    #10 10.66 npm error Missing: class-validator@0.14.2 from lock file
+    #10 10.66 npm error Missing: concurrently@9.1.2 from lock file
+    #10 10.66 npm error Missing: kafkajs@2.2.4 from lock file
+    #10 10.66 npm error Missing: pg@8.16.2 from lock file
+    #10 10.66 npm error Invalid: lock file's uuid@8.3.2 does not satisfy uuid@11.1.0
+    #10 10.66 npm error Invalid: lock file's chokidar@3.6.0 does not satisfy chokidar@4.0.3
+    #10 10.66 npm error Missing: dotenv-expand@12.0.1 from lock file
+    #10 10.66 npm error Missing: lodash@4.17.21 from lock file
+    #10 10.66 npm error Missing: pg-protocol@1.10.2 from lock file
+    #10 10.66 npm error Missing: pg-types@2.2.0 from lock file
+    #10 10.66 npm error Invalid: lock file's readdirp@3.6.0 does not satisfy readdirp@4.1.2
+    #10 10.66 npm error Missing: @types/validator@13.15.2 from lock file
+    #10 10.66 npm error Missing: libphonenumber-js@1.12.9 from lock file
+    #10 10.66 npm error Missing: validator@13.15.15 from lock file
+    #10 10.66 npm error Missing: supports-color@8.1.1 from lock file
+    #10 10.66 npm error Missing: chokidar@3.6.0 from lock file
+    #10 10.66 npm error Missing: pg-cloudflare@1.2.6 from lock file
+    #10 10.66 npm error Missing: pg-connection-string@2.9.1 from lock file
+    #10 10.66 npm error Missing: pg-pool@3.10.1 from lock file
+    #10 10.66 npm error Missing: pgpass@1.0.5 from lock file
+    #10 10.66 npm error Missing: pg-int8@1.0.1 from lock file
+    #10 10.66 npm error Missing: postgres-array@2.0.0 from lock file
+    #10 10.66 npm error Missing: postgres-bytea@1.0.0 from lock file
+    #10 10.66 npm error Missing: postgres-date@1.0.7 from lock file
+    #10 10.66 npm error Missing: postgres-interval@1.2.0 from lock file
+    #10 10.66 npm error Missing: split2@4.2.0 from lock file
+    #10 10.66 npm error Missing: uuid@8.3.2 from lock file
+    #10 10.66 npm error Missing: @sqltools/formatter@1.2.5 from lock file
+    #10 10.66 npm error Missing: ansis@3.17.0 from lock file
+    #10 10.66 npm error Missing: app-root-path@3.1.0 from lock file
+    #10 10.66 npm error Missing: buffer@6.0.3 from lock file
+    #10 10.66 npm error Missing: dayjs@1.11.13 from lock file
+    #10 10.66 npm error Missing: glob@10.4.5 from lock file
+    #10 10.66 npm error Missing: sha.js@2.4.11 from lock file
+    #10 10.66 npm error Missing: sql-highlight@6.1.0 from lock file
+    #10 10.66 npm error Missing: chokidar@3.6.0 from lock file
+    #10 10.66 npm error Missing: glob-parent@5.1.2 from lock file
+    #10 10.66 npm error Missing: readdirp@3.6.0 from lock file
+    #10 10.66 npm error Missing: picomatch@2.3.1 from lock file
+    #10 10.66 npm error Missing: minimatch@9.0.5 from lock file
+    #10 10.66 npm error Missing: glob-parent@5.1.2 from lock file
+    #10 10.66 npm error Missing: readdirp@3.6.0 from lock file
+    #10 10.66 npm error Missing: picomatch@2.3.1 from lock file
+    #10 10.66 npm error
+    #10 10.66 npm error Clean install a project
+    #10 10.66 npm error
+    #10 10.66 npm error Usage:
+    #10 10.66 npm error npm ci
+    #10 10.66 npm error
+    #10 10.66 npm error Options:
+    #10 10.66 npm error [--install-strategy <hoisted|nested|shallow|linked>] [--legacy-bundling]
+    #10 10.66 npm error [--global-style] [--omit <dev|optional|peer> [--omit <dev|optional|peer> ...]]
+    #10 10.66 npm error [--include <prod|dev|optional|peer> [--include <prod|dev|optional|peer> ...]]
+    #10 10.66 npm error [--strict-peer-deps] [--foreground-scripts] [--ignore-scripts] [--no-audit]
+    #10 10.66 npm error [--no-bin-links] [--no-fund] [--dry-run]
+    #10 10.66 npm error [-w|--workspace <workspace-name> [-w|--workspace <workspace-name> ...]]
+    #10 10.66 npm error [-ws|--workspaces] [--include-workspace-root] [--install-links]
+    #10 10.66 npm error
+    #10 10.66 npm error aliases: clean-install, ic, install-clean, isntall-clean
+    #10 10.66 npm error
+    #10 10.66 npm error Run "npm help ci" for more info
+    #10 10.66 npm notice
+    #10 10.66 npm notice New major version of npm available! 10.8.2 -> 11.4.2
+    #10 10.66 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.4.2
+    #10 10.66 npm notice To update run: npm install -g npm@11.4.2
+    #10 10.66 npm notice
+    #10 10.66 npm error A complete log of this run can be found in: /root/.npm/_logs/2025-06-21T14_35_42_269Z-debug-0.log
+    #10 ERROR: process "/bin/sh -c npm ci --only=production && npm cache clean --force" did not complete successfully: exit code: 1
+  
+    #9 [build 4/5] RUN npm ci
+    #9 CANCELED
+    ------
+     > [base 4/4] RUN npm ci --only=production && npm cache clean --force:
+    10.66 npm error
+    10.66 npm error aliases: clean-install, ic, install-clean, isntall-clean
+    10.66 npm error
+    10.66 npm error Run "npm help ci" for more info
+    10.66 npm notice
+    10.66 npm notice New major version of npm available! 10.8.2 -> 11.4.2
+    10.66 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.4.2
+    10.66 npm notice To update run: npm install -g npm@11.4.2
+    10.66 npm notice
+    10.66 npm error A complete log of this run can be found in: /root/.npm/_logs/2025-06-21T14_35_42_269Z-debug-0.log
+    ------
+    dockerfile:4
+    --------------------
+       2 |     WORKDIR /app
+       3 |     COPY package*.json ./
+       4 | >>> RUN npm ci --only=production && npm cache clean --force
+       5 |
+       6 |     FROM node:18-alpine AS build
+    --------------------
+    ERROR: failed to solve: process "/bin/sh -c npm ci --only=production && npm cache clean --force" did not complete successfully: exit code: 1
+  stderr_lines: <omitted>
+  stdout: ''
+  stdout_lines: <omitted>
+2025-06-21 21:36:10,151 p=57885 u=trannhatsang n=ansible INFO| failed: [localhost] (item={'name': 'logger-service', 'image': 'kafka-microservices/logger-service:latest', 'replicas': 1}) => changed=true 
+  ansible_loop_var: item
+  cmd: |-
+    eval $(minikube docker-env)
+    docker build -f apps/logger-service/Dockerfile -t kafka-microservices/logger-service:latest .
+  delta: '0:00:17.189123'
+  end: '2025-06-21 21:36:10.115891'
+  item:
+    image: kafka-microservices/logger-service:latest
+    name: logger-service
+    replicas: 1
+  msg: non-zero return code
+  rc: 1
+  start: '2025-06-21 21:35:52.926768'
+  stderr: |-
+    #0 building with "default" instance using docker driver
+  
+    #1 [internal] load build definition from dockerfile
+    #1 transferring dockerfile: 407B done
+    #1 DONE 0.0s
+  
+    #2 [internal] load metadata for docker.io/library/node:18-alpine
+    #2 DONE 1.1s
+  
+    #3 [internal] load .dockerignore
+    #3 transferring context: 2B done
+    #3 DONE 0.0s
+  
+    #4 [build 1/5] FROM docker.io/library/node:18-alpine@sha256:8d6421d663b4c28fd3ebc498332f249011d118945588d0a35cb9bc4b8ca09d9e
+    #4 DONE 0.0s
+  
+    #5 [internal] load build context
+    #5 transferring context: 3.89MB 1.0s done
+    #5 DONE 1.0s
+  
+    #6 [build 2/5] WORKDIR /app
+    #6 CACHED
+  
+    #7 [base 3/4] COPY package*.json ./
+    #7 CACHED
+  
+    #8 [base 4/4] RUN npm ci --only=production && npm cache clean --force
+    #8 0.463 npm warn config only Use `--omit=dev` to omit dev dependencies from the install.
+    #8 ...
+  
+    #9 [build 3/5] COPY . .
+    #9 DONE 8.2s
+  
+    #10 [build 4/5] RUN npm ci
+    #10 ...
+  
+    #8 [base 4/4] RUN npm ci --only=production && npm cache clean --force
+    #8 13.92 npm warn EBADENGINE Unsupported engine {
+    #8 13.92 npm warn EBADENGINE   package: '@nestjs/core@11.1.3',
+    #8 13.92 npm warn EBADENGINE   required: { node: '>= 20' },
+    #8 13.92 npm warn EBADENGINE   current: { node: 'v18.20.8', npm: '10.8.2' }
+    #8 13.92 npm warn EBADENGINE }
+    #8 13.93 npm warn EBADENGINE Unsupported engine {
+    #8 13.93 npm warn EBADENGINE   package: 'file-type@21.0.0',
+    #8 13.93 npm warn EBADENGINE   required: { node: '>=20' },
+    #8 13.93 npm warn EBADENGINE   current: { node: 'v18.20.8', npm: '10.8.2' }
+    #8 13.93 npm warn EBADENGINE }
+    #8 13.94 npm error code EUSAGE
+    #8 13.94 npm error
+    #8 13.94 npm error `npm ci` can only install packages when your package.json and package-lock.json or npm-shrinkwrap.json are in sync. Please update your lock file with `npm install` before continuing.
+    #8 13.94 npm error
+    #8 13.94 npm error Missing: @nestjs/config@4.0.2 from lock file
+    #8 13.94 npm error Missing: @nestjs/microservices@11.1.3 from lock file
+    #8 13.94 npm error Missing: @nestjs/typeorm@11.0.0 from lock file
+    #8 13.94 npm error Missing: typeorm@0.3.25 from lock file
+    #8 13.94 npm error Missing: @types/pg@8.15.4 from lock file
+    #8 13.94 npm error Missing: class-transformer@0.5.1 from lock file
+    #8 13.94 npm error Missing: class-validator@0.14.2 from lock file
+    #8 13.94 npm error Missing: concurrently@9.1.2 from lock file
+    #8 13.94 npm error Missing: kafkajs@2.2.4 from lock file
+    #8 13.94 npm error Missing: pg@8.16.2 from lock file
+    #8 13.94 npm error Invalid: lock file's uuid@8.3.2 does not satisfy uuid@11.1.0
+    #8 13.94 npm error Invalid: lock file's chokidar@3.6.0 does not satisfy chokidar@4.0.3
+    #8 13.94 npm error Missing: dotenv-expand@12.0.1 from lock file
+    #8 13.94 npm error Missing: lodash@4.17.21 from lock file
+    #8 13.94 npm error Missing: pg-protocol@1.10.2 from lock file
+    #8 13.94 npm error Missing: pg-types@2.2.0 from lock file
+    #8 13.94 npm error Invalid: lock file's readdirp@3.6.0 does not satisfy readdirp@4.1.2
+    #8 13.94 npm error Missing: @types/validator@13.15.2 from lock file
+    #8 13.94 npm error Missing: libphonenumber-js@1.12.9 from lock file
+    #8 13.94 npm error Missing: validator@13.15.15 from lock file
+    #8 13.94 npm error Missing: supports-color@8.1.1 from lock file
+    #8 13.94 npm error Missing: chokidar@3.6.0 from lock file
+    #8 13.94 npm error Missing: pg-cloudflare@1.2.6 from lock file
+    #8 13.94 npm error Missing: pg-connection-string@2.9.1 from lock file
+    #8 13.94 npm error Missing: pg-pool@3.10.1 from lock file
+    #8 13.94 npm error Missing: pgpass@1.0.5 from lock file
+    #8 13.94 npm error Missing: pg-int8@1.0.1 from lock file
+    #8 13.94 npm error Missing: postgres-array@2.0.0 from lock file
+    #8 13.94 npm error Missing: postgres-bytea@1.0.0 from lock file
+    #8 13.94 npm error Missing: postgres-date@1.0.7 from lock file
+    #8 13.94 npm error Missing: postgres-interval@1.2.0 from lock file
+    #8 13.94 npm error Missing: split2@4.2.0 from lock file
+    #8 13.94 npm error Missing: uuid@8.3.2 from lock file
+    #8 13.94 npm error Missing: @sqltools/formatter@1.2.5 from lock file
+    #8 13.94 npm error Missing: ansis@3.17.0 from lock file
+    #8 13.94 npm error Missing: app-root-path@3.1.0 from lock file
+    #8 13.94 npm error Missing: buffer@6.0.3 from lock file
+    #8 13.94 npm error Missing: dayjs@1.11.13 from lock file
+    #8 13.94 npm error Missing: glob@10.4.5 from lock file
+    #8 13.94 npm error Missing: sha.js@2.4.11 from lock file
+    #8 13.94 npm error Missing: sql-highlight@6.1.0 from lock file
+    #8 13.94 npm error Missing: chokidar@3.6.0 from lock file
+    #8 13.94 npm error Missing: glob-parent@5.1.2 from lock file
+    #8 13.94 npm error Missing: readdirp@3.6.0 from lock file
+    #8 13.94 npm error Missing: picomatch@2.3.1 from lock file
+    #8 13.94 npm error Missing: minimatch@9.0.5 from lock file
+    #8 13.94 npm error Missing: glob-parent@5.1.2 from lock file
+    #8 13.94 npm error Missing: readdirp@3.6.0 from lock file
+    #8 13.94 npm error Missing: picomatch@2.3.1 from lock file
+    #8 13.94 npm error
+    #8 13.94 npm error Clean install a project
+    #8 13.94 npm error
+    #8 13.94 npm error Usage:
+    #8 13.94 npm error npm ci
+    #8 13.94 npm error
+    #8 13.94 npm error Options:
+    #8 13.94 npm error [--install-strategy <hoisted|nested|shallow|linked>] [--legacy-bundling]
+    #8 13.94 npm error [--global-style] [--omit <dev|optional|peer> [--omit <dev|optional|peer> ...]]
+    #8 13.94 npm error [--include <prod|dev|optional|peer> [--include <prod|dev|optional|peer> ...]]
+    #8 13.94 npm error [--strict-peer-deps] [--foreground-scripts] [--ignore-scripts] [--no-audit]
+    #8 13.94 npm error [--no-bin-links] [--no-fund] [--dry-run]
+    #8 13.94 npm error [-w|--workspace <workspace-name> [-w|--workspace <workspace-name> ...]]
+    #8 13.94 npm error [-ws|--workspaces] [--include-workspace-root] [--install-links]
+    #8 13.94 npm error
+    #8 13.94 npm error aliases: clean-install, ic, install-clean, isntall-clean
+    #8 13.94 npm error
+    #8 13.94 npm error Run "npm help ci" for more info
+    #8 13.94 npm notice
+    #8 13.94 npm notice New major version of npm available! 10.8.2 -> 11.4.2
+    #8 13.94 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.4.2
+    #8 13.94 npm notice To update run: npm install -g npm@11.4.2
+    #8 13.94 npm notice
+    #8 13.94 npm error A complete log of this run can be found in: /root/.npm/_logs/2025-06-21T14_35_56_326Z-debug-0.log
+    #8 ERROR: process "/bin/sh -c npm ci --only=production && npm cache clean --force" did not complete successfully: exit code: 1
+  
+    #10 [build 4/5] RUN npm ci
+    #10 CANCELED
+    ------
+     > [base 4/4] RUN npm ci --only=production && npm cache clean --force:
+    13.94 npm error
+    13.94 npm error aliases: clean-install, ic, install-clean, isntall-clean
+    13.94 npm error
+    13.94 npm error Run "npm help ci" for more info
+    13.94 npm notice
+    13.94 npm notice New major version of npm available! 10.8.2 -> 11.4.2
+    13.94 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.4.2
+    13.94 npm notice To update run: npm install -g npm@11.4.2
+    13.94 npm notice
+    13.94 npm error A complete log of this run can be found in: /root/.npm/_logs/2025-06-21T14_35_56_326Z-debug-0.log
+    ------
+    dockerfile:4
+    --------------------
+       2 |     WORKDIR /app
+       3 |     COPY package*.json ./
+       4 | >>> RUN npm ci --only=production && npm cache clean --force
+       5 |
+       6 |     FROM node:18-alpine AS build
+    --------------------
+    ERROR: failed to solve: process "/bin/sh -c npm ci --only=production && npm cache clean --force" did not complete successfully: exit code: 1
+  stderr_lines: <omitted>
+  stdout: ''
+  stdout_lines: <omitted>
+2025-06-21 21:36:10,154 p=57885 u=trannhatsang n=ansible INFO| PLAY RECAP ***********************************************************************************************************************************************
+2025-06-21 21:36:10,154 p=57885 u=trannhatsang n=ansible INFO| localhost                  : ok=8    changed=1    unreachable=0    failed=1    skipped=2    rescued=0    ignored=0   
+2025-06-22 09:19:38,757 p=8050 u=trannhatsang n=ansible INFO| @all:
+  |--@ungrouped:
+  |--@local:
+  |  |--localhost
+2025-06-22 09:19:38,957 p=8056 u=trannhatsang n=ansible INFO| @all:
+  |--@ungrouped:
+  |--@local:
+  |  |--localhost
+2025-06-22 09:19:58,373 p=8966 u=trannhatsang n=ansible INFO| PLAY [Deploy Kafka Microservices to Kubernetes] ********************************************************************************************************
+2025-06-22 09:19:58,378 p=8966 u=trannhatsang n=ansible WARNING| [WARNING]: Found variable using reserved name: environment
+
+2025-06-22 09:19:58,378 p=8966 u=trannhatsang n=ansible INFO| TASK [Check if Docker is running] **********************************************************************************************************************
+2025-06-22 09:19:58,835 p=8966 u=trannhatsang n=ansible WARNING| [WARNING]: Platform darwin on host localhost is using the discovered Python interpreter at /opt/homebrew/bin/python3.13, but future installation of
+another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-06-22 09:19:58,835 p=8966 u=trannhatsang n=ansible INFO| ok: [localhost]
+2025-06-22 09:19:58,836 p=8966 u=trannhatsang n=ansible INFO| TASK [Fail if Docker is not running] *******************************************************************************************************************
+2025-06-22 09:19:58,843 p=8966 u=trannhatsang n=ansible INFO| skipping: [localhost]
+2025-06-22 09:19:58,844 p=8966 u=trannhatsang n=ansible INFO| TASK [Check if Minikube is running] ********************************************************************************************************************
+2025-06-22 09:19:59,409 p=8966 u=trannhatsang n=ansible INFO| ok: [localhost]
+2025-06-22 09:19:59,410 p=8966 u=trannhatsang n=ansible INFO| TASK [Start Minikube if not running] *******************************************************************************************************************
+2025-06-22 09:19:59,825 p=8966 u=trannhatsang n=ansible INFO| fatal: [localhost]: FAILED! => changed=true 
+  cmd:
+  - minikube
+  - start
+  - --memory=8192
+  - --cpus=4
+  - --disk-size=20g
+  delta: '0:00:00.283511'
+  end: '2025-06-22 09:19:59.808354'
+  msg: non-zero return code
+  rc: 14
+  start: '2025-06-22 09:19:59.524843'
+  stderr: 'X Exiting due to MK_USAGE: Docker Desktop has only 7844MB memory but you specified 8192MB'
+  stderr_lines: <omitted>
+  stdout: |-
+    * minikube v1.36.0 on Darwin 13.7 (arm64)
+    * Using the docker driver based on existing profile
+  stdout_lines: <omitted>
+2025-06-22 09:19:59,826 p=8966 u=trannhatsang n=ansible INFO| PLAY RECAP *********************************************************************************************************************************************
+2025-06-22 09:19:59,826 p=8966 u=trannhatsang n=ansible INFO| localhost                  : ok=2    changed=0    unreachable=0    failed=1    skipped=1    rescued=0    ignored=0   
+2025-06-22 09:24:18,181 p=12842 u=trannhatsang n=ansible INFO| PLAY [Deploy Kafka Microservices to Kubernetes] ********************************************************************************************************
+2025-06-22 09:24:18,188 p=12842 u=trannhatsang n=ansible WARNING| [WARNING]: Found variable using reserved name: environment
+
+2025-06-22 09:24:18,188 p=12842 u=trannhatsang n=ansible INFO| TASK [Check if Docker is running] **********************************************************************************************************************
+2025-06-22 09:24:18,654 p=12842 u=trannhatsang n=ansible WARNING| [WARNING]: Platform darwin on host localhost is using the discovered Python interpreter at /opt/homebrew/bin/python3.13, but future installation of
+another Python interpreter could change the meaning of that path. See https://docs.ansible.com/ansible-
+core/2.18/reference_appendices/interpreter_discovery.html for more information.
+
+2025-06-22 09:24:18,654 p=12842 u=trannhatsang n=ansible INFO| ok: [localhost]
+2025-06-22 09:24:18,656 p=12842 u=trannhatsang n=ansible INFO| TASK [Fail if Docker is not running] *******************************************************************************************************************
+2025-06-22 09:24:18,662 p=12842 u=trannhatsang n=ansible INFO| skipping: [localhost]
+2025-06-22 09:24:18,663 p=12842 u=trannhatsang n=ansible INFO| TASK [Check if Minikube is running] ********************************************************************************************************************
+2025-06-22 09:24:19,259 p=12842 u=trannhatsang n=ansible INFO| ok: [localhost]
+2025-06-22 09:24:19,260 p=12842 u=trannhatsang n=ansible INFO| TASK [Start Minikube if not running] *******************************************************************************************************************
+2025-06-22 09:24:19,266 p=12842 u=trannhatsang n=ansible INFO| skipping: [localhost]
+2025-06-22 09:24:19,267 p=12842 u=trannhatsang n=ansible INFO| TASK [Wait for Minikube to be ready] *******************************************************************************************************************
+2025-06-22 09:24:19,523 p=12842 u=trannhatsang n=ansible INFO| changed: [localhost]
+2025-06-22 09:24:19,524 p=12842 u=trannhatsang n=ansible INFO| TASK [Get Minikube IP] *********************************************************************************************************************************
+2025-06-22 09:24:19,780 p=12842 u=trannhatsang n=ansible INFO| ok: [localhost]
+2025-06-22 09:24:19,781 p=12842 u=trannhatsang n=ansible INFO| TASK [Set Minikube IP fact] ****************************************************************************************************************************
+2025-06-22 09:24:19,788 p=12842 u=trannhatsang n=ansible INFO| ok: [localhost]
+2025-06-22 09:24:19,790 p=12842 u=trannhatsang n=ansible INFO| TASK [Configure Docker environment for Minikube] *******************************************************************************************************
+2025-06-22 09:24:20,267 p=12842 u=trannhatsang n=ansible INFO| ok: [localhost]
+2025-06-22 09:24:20,268 p=12842 u=trannhatsang n=ansible INFO| TASK [Build Docker images] *****************************************************************************************************************************
+2025-06-22 09:24:20,276 p=12842 u=trannhatsang n=ansible INFO| included: /Users/trannhatsang/Documents/Programming/Kafka/kafka-microservices/ansible/tasks/build-images.yml for localhost
+2025-06-22 09:24:20,277 p=12842 u=trannhatsang n=ansible INFO| TASK [Set Docker environment for Minikube] *************************************************************************************************************
+2025-06-22 09:24:20,765 p=12842 u=trannhatsang n=ansible INFO| ok: [localhost]
+2025-06-22 09:24:20,766 p=12842 u=trannhatsang n=ansible INFO| TASK [Build Docker images for each service] ************************************************************************************************************
+2025-06-22 09:24:50,294 p=12842 u=trannhatsang n=ansible INFO| changed: [localhost] => (item={'name': 'order-gateway', 'image': 'kafka-microservices/order-gateway:latest', 'port': 3000, 'replicas': 2})
+2025-06-22 09:25:16,203 p=12842 u=trannhatsang n=ansible INFO| changed: [localhost] => (item={'name': 'order-service', 'image': 'kafka-microservices/order-service:latest', 'replicas': 2})
+2025-06-22 09:25:40,183 p=12842 u=trannhatsang n=ansible INFO| changed: [localhost] => (item={'name': 'notification-service', 'image': 'kafka-microservices/notification-service:latest', 'replicas': 1})
+2025-06-22 09:26:01,667 p=12842 u=trannhatsang n=ansible INFO| changed: [localhost] => (item={'name': 'logger-service', 'image': 'kafka-microservices/logger-service:latest', 'replicas': 1})
+2025-06-22 09:26:01,673 p=12842 u=trannhatsang n=ansible INFO| TASK [Display build results] ***************************************************************************************************************************
+2025-06-22 09:26:01,689 p=12842 u=trannhatsang n=ansible INFO| ok: [localhost] => (item={'changed': True, 'stdout': '', 'stderr': '#0 building with "default" instance using docker driver\n\n#1 [internal] load build definition from dockerfile\n#1 transferring dockerfile: 551B done\n#1 DONE 0.0s\n\n#2 [internal] load metadata for docker.io/library/node:20-alpine\n#2 DONE 2.1s\n\n#3 [internal] load .dockerignore\n#3 transferring context: 2B done\n#3 DONE 0.0s\n\n#4 [ 1/10] FROM docker.io/library/node:20-alpine@sha256:d3507a213936fe4ef54760a186e113db5188472d9efdf491686bd94580a1c1e8\n#4 DONE 0.0s\n\n#5 [internal] load build context\n#5 transferring context: 7.09MB 1.6s done\n#5 DONE 1.8s\n\n#6 [ 4/10] COPY tsconfig.base.json ./\n#6 CACHED\n\n#7 [ 5/10] COPY nx.json ./\n#7 CACHED\n\n#8 [ 2/10] WORKDIR /app\n#8 CACHED\n\n#9 [ 3/10] COPY package*.json ./\n#9 CACHED\n\n#10 [ 6/10] RUN npm install\n#10 CACHED\n\n#11 [ 7/10] COPY . .\n#11 DONE 9.8s\n\n#12 [ 8/10] RUN npx nx build order-gateway --prod\n#12 8.629 \n#12 8.629 > nx run order-gateway:build\n#12 8.629 \n#12 8.631 > webpack-cli build node-env=production\r\n#12 8.631 \r\n#12 9.964 chunk (runtime: main) \x1b[1m\x1b[32mmain.js\x1b[39m\x1b[22m (main) 10.9 KiB \x1b[1m\x1b[33m[entry]\x1b[39m\x1b[22m \x1b[1m\x1b[32m[rendered]\x1b[39m\x1b[22m\n#12 9.964 webpack compiled \x1b[1m\x1b[32msuccessfully\x1b[39m\x1b[22m (90a16cdd476d09bd)\n#12 9.983 \n#12 9.983 \n#12 9.983 \n#12 9.983  NX   Successfully ran target build for project order-gateway\n#12 9.983 \n#12 9.984 \n#12 10.06 View logs and investigate cache misses at https://nx.app/runs/4TSW9T1fPH\n#12 10.06 \n#12 DONE 10.6s\n\n#13 [ 9/10] WORKDIR /app/apps/order-gateway/dist\n#13 DONE 0.0s\n\n#14 [10/10] RUN rm -rf /app/node_modules/.cache /app/.nx\n#14 DONE 0.1s\n\n#15 exporting to image\n#15 exporting layers\n#15 exporting layers 4.1s done\n#15 writing image sha256:57115d0a4bc3b477bb2ec5df4cbc060a2dc297e155436cf03a3782ea70666720 done\n#15 naming to docker.io/kafka-microservices/order-gateway:latest done\n#15 DONE 4.1s\n\nWhat\'s Next?\n  1. Sign in to your Docker account → docker login\n  2. View a summary of image vulnerabilities and recommendations → docker scout quickview', 'rc': 0, 'cmd': 'eval $(minikube docker-env)\ndocker build -f apps/order-gateway/Dockerfile -t kafka-microservices/order-gateway:latest .\n', 'start': '2025-06-22 09:24:20.889341', 'end': '2025-06-22 09:24:50.268385', 'delta': '0:00:29.379044', 'msg': '', 'invocation': {'module_args': {'chdir': '/Users/trannhatsang/Documents/Programming/Kafka/kafka-microservices/ansible/..', '_raw_params': 'eval $(minikube docker-env)\ndocker build -f apps/order-gateway/Dockerfile -t kafka-microservices/order-gateway:latest .\n', '_uses_shell': True, 'expand_argument_vars': True, 'stdin_add_newline': True, 'strip_empty_ends': True, 'argv': None, 'executable': None, 'creates': None, 'removes': None, 'stdin': None}}, 'stdout_lines': [], 'stderr_lines': ['#0 building with "default" instance using docker driver', '', '#1 [internal] load build definition from dockerfile', '#1 transferring dockerfile: 551B done', '#1 DONE 0.0s', '', '#2 [internal] load metadata for docker.io/library/node:20-alpine', '#2 DONE 2.1s', '', '#3 [internal] load .dockerignore', '#3 transferring context: 2B done', '#3 DONE 0.0s', '', '#4 [ 1/10] FROM docker.io/library/node:20-alpine@sha256:d3507a213936fe4ef54760a186e113db5188472d9efdf491686bd94580a1c1e8', '#4 DONE 0.0s', '', '#5 [internal] load build context', '#5 transferring context: 7.09MB 1.6s done', '#5 DONE 1.8s', '', '#6 [ 4/10] COPY tsconfig.base.json ./', '#6 CACHED', '', '#7 [ 5/10] COPY nx.json ./', '#7 CACHED', '', '#8 [ 2/10] WORKDIR /app', '#8 CACHED', '', '#9 [ 3/10] COPY package*.json ./', '#9 CACHED', '', '#10 [ 6/10] RUN npm install', '#10 CACHED', '', '#11 [ 7/10] COPY . .', '#11 DONE 9.8s', '', '#12 [ 8/10] RUN npx nx build order-gateway --prod', '#12 8.629 ', '#12 8.629 > nx run order-gateway:build', '#12 8.629 ', '#12 8.631 > webpack-cli build node-env=production', '#12 8.631 ', '#12 9.964 chunk (runtime: main) \x1b[1m\x1b[32mmain.js\x1b[39m\x1b[22m (main) 10.9 KiB \x1b[1m\x1b[33m[entry]\x1b[39m\x1b[22m \x1b[1m\x1b[32m[rendered]\x1b[39m\x1b[22m', '#12 9.964 webpack compiled \x1b[1m\x1b[32msuccessfully\x1b[39m\x1b[22m (90a16cdd476d09bd)', '#12 9.983 ', '#12 9.983 ', '#12 9.983 ', '#12 9.983  NX   Successfully ran target build for project order-gateway', '#12 9.983 ', '#12 9.984 ', '#12 10.06 View logs and investigate cache misses at https://nx.app/runs/4TSW9T1fPH', '#12 10.06 ', '#12 DONE 10.6s', '', '#13 [ 9/10] WORKDIR /app/apps/order-gateway/dist', '#13 DONE 0.0s', '', '#14 [10/10] RUN rm -rf /app/node_modules/.cache /app/.nx', '#14 DONE 0.1s', '', '#15 exporting to image', '#15 exporting layers', '#15 exporting layers 4.1s done', '#15 writing image sha256:57115d0a4bc3b477bb2ec5df4cbc060a2dc297e155436cf03a3782ea70666720 done', '#15 naming to docker.io/kafka-microservices/order-gateway:latest done', '#15 DONE 4.1s', '', "What's Next?", '  1. Sign in to your Docker account → docker login', '  2. View a summary of image vulnerabilities and recommendations → docker scout quickview'], 'failed': False, 'item': {'name': 'order-gateway', 'image': 'kafka-microservices/order-gateway:latest', 'port': 3000, 'replicas': 2}, 'ansible_loop_var': 'item'}) => 
+  msg: 'Built image: kafka-microservices/order-gateway:latest'
+2025-06-22 09:26:01,689 p=12842 u=trannhatsang n=ansible INFO| ok: [localhost] => (item={'changed': True, 'stdout': '', 'stderr': '#0 building with "default" instance using docker driver\n\n#1 [internal] load build definition from dockerfile\n#1 transferring dockerfile: 538B done\n#1 DONE 0.0s\n\n#2 [internal] load metadata for docker.io/library/node:20-alpine\n#2 DONE 1.0s\n\n#3 [internal] load .dockerignore\n#3 transferring context: 2B done\n#3 DONE 0.0s\n\n#4 [ 1/10] FROM docker.io/library/node:20-alpine@sha256:d3507a213936fe4ef54760a186e113db5188472d9efdf491686bd94580a1c1e8\n#4 DONE 0.0s\n\n#5 [internal] load build context\n#5 transferring context: 3.65MB 0.8s done\n#5 DONE 0.9s\n\n#6 [ 2/10] WORKDIR /app\n#6 CACHED\n\n#7 [ 3/10] COPY package*.json ./\n#7 CACHED\n\n#8 [ 4/10] COPY tsconfig.base.json ./\n#8 CACHED\n\n#9 [ 5/10] COPY nx.json ./\n#9 CACHED\n\n#10 [ 6/10] RUN npm install\n#10 CACHED\n\n#11 [ 7/10] COPY . .\n#11 DONE 6.9s\n\n#12 [ 8/10] RUN npx nx build order-service --prod\n#12 8.420 \n#12 8.420 > nx run order-service:build\n#12 8.420 \n#12 8.421 > webpack-cli build node-env=production\r\n#12 8.421 \r\n#12 11.42 chunk (runtime: main) \x1b[1m\x1b[32mmain.js\x1b[39m\x1b[22m (main) 12.6 KiB \x1b[1m\x1b[33m[entry]\x1b[39m\x1b[22m \x1b[1m\x1b[32m[rendered]\x1b[39m\x1b[22m\n#12 11.42 webpack compiled \x1b[1m\x1b[32msuccessfully\x1b[39m\x1b[22m (2642429bc0250c36)\n#12 11.45 \n#12 11.45 \n#12 11.45 \n#12 11.45  NX   Successfully ran target build for project order-service\n#12 11.45 \n#12 11.45 \n#12 11.57 View logs and investigate cache misses at https://nx.app/runs/WLru1dWGRK\n#12 11.57 \n#12 DONE 12.2s\n\n#13 [ 9/10] WORKDIR /app/apps/order-service/dist\n#13 DONE 0.0s\n\n#14 [10/10] RUN rm -rf /app/node_modules/.cache /app/.nx\n#14 DONE 0.2s\n\n#15 exporting to image\n#15 exporting layers\n#15 exporting layers 3.5s done\n#15 writing image sha256:975e8bfb75b0f5e5b61edf30f338ab9dfeb31ed913ba6076fb1ec8ab6943e8b1 done\n#15 naming to docker.io/kafka-microservices/order-service:latest done\n#15 DONE 3.5s\n\nWhat\'s Next?\n  1. Sign in to your Docker account → docker login\n  2. View a summary of image vulnerabilities and recommendations → docker scout quickview', 'rc': 0, 'cmd': 'eval $(minikube docker-env)\ndocker build -f apps/order-service/Dockerfile -t kafka-microservices/order-service:latest .\n', 'start': '2025-06-22 09:24:50.434840', 'end': '2025-06-22 09:25:16.178135', 'delta': '0:00:25.743295', 'msg': '', 'invocation': {'module_args': {'chdir': '/Users/trannhatsang/Documents/Programming/Kafka/kafka-microservices/ansible/..', '_raw_params': 'eval $(minikube docker-env)\ndocker build -f apps/order-service/Dockerfile -t kafka-microservices/order-service:latest .\n', '_uses_shell': True, 'expand_argument_vars': True, 'stdin_add_newline': True, 'strip_empty_ends': True, 'argv': None, 'executable': None, 'creates': None, 'removes': None, 'stdin': None}}, 'stdout_lines': [], 'stderr_lines': ['#0 building with "default" instance using docker driver', '', '#1 [internal] load build definition from dockerfile', '#1 transferring dockerfile: 538B done', '#1 DONE 0.0s', '', '#2 [internal] load metadata for docker.io/library/node:20-alpine', '#2 DONE 1.0s', '', '#3 [internal] load .dockerignore', '#3 transferring context: 2B done', '#3 DONE 0.0s', '', '#4 [ 1/10] FROM docker.io/library/node:20-alpine@sha256:d3507a213936fe4ef54760a186e113db5188472d9efdf491686bd94580a1c1e8', '#4 DONE 0.0s', '', '#5 [internal] load build context', '#5 transferring context: 3.65MB 0.8s done', '#5 DONE 0.9s', '', '#6 [ 2/10] WORKDIR /app', '#6 CACHED', '', '#7 [ 3/10] COPY package*.json ./', '#7 CACHED', '', '#8 [ 4/10] COPY tsconfig.base.json ./', '#8 CACHED', '', '#9 [ 5/10] COPY nx.json ./', '#9 CACHED', '', '#10 [ 6/10] RUN npm install', '#10 CACHED', '', '#11 [ 7/10] COPY . .', '#11 DONE 6.9s', '', '#12 [ 8/10] RUN npx nx build order-service --prod', '#12 8.420 ', '#12 8.420 > nx run order-service:build', '#12 8.420 ', '#12 8.421 > webpack-cli build node-env=production', '#12 8.421 ', '#12 11.42 chunk (runtime: main) \x1b[1m\x1b[32mmain.js\x1b[39m\x1b[22m (main) 12.6 KiB \x1b[1m\x1b[33m[entry]\x1b[39m\x1b[22m \x1b[1m\x1b[32m[rendered]\x1b[39m\x1b[22m', '#12 11.42 webpack compiled \x1b[1m\x1b[32msuccessfully\x1b[39m\x1b[22m (2642429bc0250c36)', '#12 11.45 ', '#12 11.45 ', '#12 11.45 ', '#12 11.45  NX   Successfully ran target build for project order-service', '#12 11.45 ', '#12 11.45 ', '#12 11.57 View logs and investigate cache misses at https://nx.app/runs/WLru1dWGRK', '#12 11.57 ', '#12 DONE 12.2s', '', '#13 [ 9/10] WORKDIR /app/apps/order-service/dist', '#13 DONE 0.0s', '', '#14 [10/10] RUN rm -rf /app/node_modules/.cache /app/.nx', '#14 DONE 0.2s', '', '#15 exporting to image', '#15 exporting layers', '#15 exporting layers 3.5s done', '#15 writing image sha256:975e8bfb75b0f5e5b61edf30f338ab9dfeb31ed913ba6076fb1ec8ab6943e8b1 done', '#15 naming to docker.io/kafka-microservices/order-service:latest done', '#15 DONE 3.5s', '', "What's Next?", '  1. Sign in to your Docker account → docker login', '  2. View a summary of image vulnerabilities and recommendations → docker scout quickview'], 'failed': False, 'item': {'name': 'order-service', 'image': 'kafka-microservices/order-service:latest', 'replicas': 2}, 'ansible_loop_var': 'item'}) => 
+  msg: 'Built image: kafka-microservices/order-service:latest'
+2025-06-22 09:26:01,692 p=12842 u=trannhatsang n=ansible INFO| ok: [localhost] => (item={'changed': True, 'stdout': '', 'stderr': '#0 building with "default" instance using docker driver\n\n#1 [internal] load build definition from dockerfile\n#1 transferring dockerfile: 559B done\n#1 DONE 0.0s\n\n#2 [internal] load metadata for docker.io/library/node:20-alpine\n#2 DONE 1.0s\n\n#3 [internal] load .dockerignore\n#3 transferring context: 2B done\n#3 DONE 0.0s\n\n#4 [ 1/10] FROM docker.io/library/node:20-alpine@sha256:d3507a213936fe4ef54760a186e113db5188472d9efdf491686bd94580a1c1e8\n#4 DONE 0.0s\n\n#5 [internal] load build context\n#5 transferring context: 3.65MB 0.9s done\n#5 DONE 0.9s\n\n#6 [ 2/10] WORKDIR /app\n#6 CACHED\n\n#7 [ 3/10] COPY package*.json ./\n#7 CACHED\n\n#8 [ 4/10] COPY tsconfig.base.json ./\n#8 CACHED\n\n#9 [ 5/10] COPY nx.json ./\n#9 CACHED\n\n#10 [ 6/10] RUN npm install\n#10 CACHED\n\n#11 [ 7/10] COPY . .\n#11 DONE 6.9s\n\n#12 [ 8/10] RUN npx nx build notification-service --prod\n#12 9.270 \n#12 9.270 > nx run notification-service:build\n#12 9.270 \n#12 9.271 > webpack-cli build node-env=production\r\n#12 9.271 \r\n#12 10.47 chunk (runtime: main) \x1b[1m\x1b[32mmain.js\x1b[39m\x1b[22m (main) 6.35 KiB \x1b[1m\x1b[33m[entry]\x1b[39m\x1b[22m \x1b[1m\x1b[32m[rendered]\x1b[39m\x1b[22m\n#12 10.47 webpack compiled \x1b[1m\x1b[32msuccessfully\x1b[39m\x1b[22m (75118f3463ae55fe)\n#12 10.49 \n#12 10.49 \n#12 10.49 \n#12 10.49  NX   Successfully ran target build for project notification-service\n#12 10.49 \n#12 10.49 \n#12 10.57 View logs and investigate cache misses at https://nx.app/runs/ECvmoRRd9g\n#12 10.57 \n#12 DONE 11.0s\n\n#13 [ 9/10] WORKDIR /app/apps/notification-service/dist\n#13 DONE 0.0s\n\n#14 [10/10] RUN rm -rf /app/node_modules/.cache /app/.nx\n#14 DONE 0.1s\n\n#15 exporting to image\n#15 exporting layers\n#15 exporting layers 3.1s done\n#15 writing image sha256:7172bf0864c01a4df9275301ba01a54cd028c150d2f6866e28ff9d4e7496ecc1 done\n#15 naming to docker.io/kafka-microservices/notification-service:latest done\n#15 DONE 3.1s\n\nWhat\'s Next?\n  1. Sign in to your Docker account → docker login\n  2. View a summary of image vulnerabilities and recommendations → docker scout quickview', 'rc': 0, 'cmd': 'eval $(minikube docker-env)\ndocker build -f apps/notification-service/Dockerfile -t kafka-microservices/notification-service:latest .\n', 'start': '2025-06-22 09:25:16.356689', 'end': '2025-06-22 09:25:40.154448', 'delta': '0:00:23.797759', 'msg': '', 'invocation': {'module_args': {'chdir': '/Users/trannhatsang/Documents/Programming/Kafka/kafka-microservices/ansible/..', '_raw_params': 'eval $(minikube docker-env)\ndocker build -f apps/notification-service/Dockerfile -t kafka-microservices/notification-service:latest .\n', '_uses_shell': True, 'expand_argument_vars': True, 'stdin_add_newline': True, 'strip_empty_ends': True, 'argv': None, 'executable': None, 'creates': None, 'removes': None, 'stdin': None}}, 'stdout_lines': [], 'stderr_lines': ['#0 building with "default" instance using docker driver', '', '#1 [internal] load build definition from dockerfile', '#1 transferring dockerfile: 559B done', '#1 DONE 0.0s', '', '#2 [internal] load metadata for docker.io/library/node:20-alpine', '#2 DONE 1.0s', '', '#3 [internal] load .dockerignore', '#3 transferring context: 2B done', '#3 DONE 0.0s', '', '#4 [ 1/10] FROM docker.io/library/node:20-alpine@sha256:d3507a213936fe4ef54760a186e113db5188472d9efdf491686bd94580a1c1e8', '#4 DONE 0.0s', '', '#5 [internal] load build context', '#5 transferring context: 3.65MB 0.9s done', '#5 DONE 0.9s', '', '#6 [ 2/10] WORKDIR /app', '#6 CACHED', '', '#7 [ 3/10] COPY package*.json ./', '#7 CACHED', '', '#8 [ 4/10] COPY tsconfig.base.json ./', '#8 CACHED', '', '#9 [ 5/10] COPY nx.json ./', '#9 CACHED', '', '#10 [ 6/10] RUN npm install', '#10 CACHED', '', '#11 [ 7/10] COPY . .', '#11 DONE 6.9s', '', '#12 [ 8/10] RUN npx nx build notification-service --prod', '#12 9.270 ', '#12 9.270 > nx run notification-service:build', '#12 9.270 ', '#12 9.271 > webpack-cli build node-env=production', '#12 9.271 ', '#12 10.47 chunk (runtime: main) \x1b[1m\x1b[32mmain.js\x1b[39m\x1b[22m (main) 6.35 KiB \x1b[1m\x1b[33m[entry]\x1b[39m\x1b[22m \x1b[1m\x1b[32m[rendered]\x1b[39m\x1b[22m', '#12 10.47 webpack compiled \x1b[1m\x1b[32msuccessfully\x1b[39m\x1b[22m (75118f3463ae55fe)', '#12 10.49 ', '#12 10.49 ', '#12 10.49 ', '#12 10.49  NX   Successfully ran target build for project notification-service', '#12 10.49 ', '#12 10.49 ', '#12 10.57 View logs and investigate cache misses at https://nx.app/runs/ECvmoRRd9g', '#12 10.57 ', '#12 DONE 11.0s', '', '#13 [ 9/10] WORKDIR /app/apps/notification-service/dist', '#13 DONE 0.0s', '', '#14 [10/10] RUN rm -rf /app/node_modules/.cache /app/.nx', '#14 DONE 0.1s', '', '#15 exporting to image', '#15 exporting layers', '#15 exporting layers 3.1s done', '#15 writing image sha256:7172bf0864c01a4df9275301ba01a54cd028c150d2f6866e28ff9d4e7496ecc1 done', '#15 naming to docker.io/kafka-microservices/notification-service:latest done', '#15 DONE 3.1s', '', "What's Next?", '  1. Sign in to your Docker account → docker login', '  2. View a summary of image vulnerabilities and recommendations → docker scout quickview'], 'failed': False, 'item': {'name': 'notification-service', 'image': 'kafka-microservices/notification-service:latest', 'replicas': 1}, 'ansible_loop_var': 'item'}) => 
+  msg: 'Built image: kafka-microservices/notification-service:latest'
+2025-06-22 09:26:01,696 p=12842 u=trannhatsang n=ansible INFO| ok: [localhost] => (item={'changed': True, 'stdout': '', 'stderr': '#0 building with "default" instance using docker driver\n\n#1 [internal] load build definition from dockerfile\n#1 transferring dockerfile: 541B done\n#1 DONE 0.0s\n\n#2 [internal] load metadata for docker.io/library/node:20-alpine\n#2 DONE 0.9s\n\n#3 [internal] load .dockerignore\n#3 transferring context: 2B done\n#3 DONE 0.0s\n\n#4 [ 1/10] FROM docker.io/library/node:20-alpine@sha256:d3507a213936fe4ef54760a186e113db5188472d9efdf491686bd94580a1c1e8\n#4 DONE 0.0s\n\n#5 [internal] load build context\n#5 transferring context: 3.65MB 1.0s done\n#5 DONE 1.0s\n\n#6 [ 5/10] COPY nx.json ./\n#6 CACHED\n\n#7 [ 2/10] WORKDIR /app\n#7 CACHED\n\n#8 [ 3/10] COPY package*.json ./\n#8 CACHED\n\n#9 [ 4/10] COPY tsconfig.base.json ./\n#9 CACHED\n\n#10 [ 6/10] RUN npm install\n#10 CACHED\n\n#11 [ 7/10] COPY . .\n#11 DONE 5.2s\n\n#12 [ 8/10] RUN npx nx build logger-service --prod\n#12 8.340 \n#12 8.340 > nx run logger-service:build\n#12 8.340 \n#12 8.342 > webpack-cli build node-env=production\r\n#12 8.342 \r\n#12 9.320 chunk (runtime: main) \x1b[1m\x1b[32mmain.js\x1b[39m\x1b[22m (main) 6.99 KiB \x1b[1m\x1b[33m[entry]\x1b[39m\x1b[22m \x1b[1m\x1b[32m[rendered]\x1b[39m\x1b[22m\n#12 9.320 webpack compiled \x1b[1m\x1b[32msuccessfully\x1b[39m\x1b[22m (9c84d89542177468)\n#12 9.337 \n#12 9.337 \n#12 9.337 \n#12 9.337  NX   Successfully ran target build for project logger-service\n#12 9.337 \n#12 9.337 \n#12 9.406 View logs and investigate cache misses at https://nx.app/runs/dxErQT4wHl\n#12 9.406 \n#12 DONE 9.7s\n\n#13 [ 9/10] WORKDIR /app/apps/logger-service/dist\n#13 DONE 0.0s\n\n#14 [10/10] RUN rm -rf /app/node_modules/.cache /app/.nx\n#14 DONE 0.1s\n\n#15 exporting to image\n#15 exporting layers\n#15 exporting layers 3.5s done\n#15 writing image sha256:74946715be81e69152a1bd6aa9630101582c4c2a80aae896872e0001a51f79e9 done\n#15 naming to docker.io/kafka-microservices/logger-service:latest done\n#15 DONE 3.5s\n\nWhat\'s Next?\n  1. Sign in to your Docker account → docker login\n  2. View a summary of image vulnerabilities and recommendations → docker scout quickview', 'rc': 0, 'cmd': 'eval $(minikube docker-env)\ndocker build -f apps/logger-service/Dockerfile -t kafka-microservices/logger-service:latest .\n', 'start': '2025-06-22 09:25:40.321314', 'end': '2025-06-22 09:26:01.642442', 'delta': '0:00:21.321128', 'msg': '', 'invocation': {'module_args': {'chdir': '/Users/trannhatsang/Documents/Programming/Kafka/kafka-microservices/ansible/..', '_raw_params': 'eval $(minikube docker-env)\ndocker build -f apps/logger-service/Dockerfile -t kafka-microservices/logger-service:latest .\n', '_uses_shell': True, 'expand_argument_vars': True, 'stdin_add_newline': True, 'strip_empty_ends': True, 'argv': None, 'executable': None, 'creates': None, 'removes': None, 'stdin': None}}, 'stdout_lines': [], 'stderr_lines': ['#0 building with "default" instance using docker driver', '', '#1 [internal] load build definition from dockerfile', '#1 transferring dockerfile: 541B done', '#1 DONE 0.0s', '', '#2 [internal] load metadata for docker.io/library/node:20-alpine', '#2 DONE 0.9s', '', '#3 [internal] load .dockerignore', '#3 transferring context: 2B done', '#3 DONE 0.0s', '', '#4 [ 1/10] FROM docker.io/library/node:20-alpine@sha256:d3507a213936fe4ef54760a186e113db5188472d9efdf491686bd94580a1c1e8', '#4 DONE 0.0s', '', '#5 [internal] load build context', '#5 transferring context: 3.65MB 1.0s done', '#5 DONE 1.0s', '', '#6 [ 5/10] COPY nx.json ./', '#6 CACHED', '', '#7 [ 2/10] WORKDIR /app', '#7 CACHED', '', '#8 [ 3/10] COPY package*.json ./', '#8 CACHED', '', '#9 [ 4/10] COPY tsconfig.base.json ./', '#9 CACHED', '', '#10 [ 6/10] RUN npm install', '#10 CACHED', '', '#11 [ 7/10] COPY . .', '#11 DONE 5.2s', '', '#12 [ 8/10] RUN npx nx build logger-service --prod', '#12 8.340 ', '#12 8.340 > nx run logger-service:build', '#12 8.340 ', '#12 8.342 > webpack-cli build node-env=production', '#12 8.342 ', '#12 9.320 chunk (runtime: main) \x1b[1m\x1b[32mmain.js\x1b[39m\x1b[22m (main) 6.99 KiB \x1b[1m\x1b[33m[entry]\x1b[39m\x1b[22m \x1b[1m\x1b[32m[rendered]\x1b[39m\x1b[22m', '#12 9.320 webpack compiled \x1b[1m\x1b[32msuccessfully\x1b[39m\x1b[22m (9c84d89542177468)', '#12 9.337 ', '#12 9.337 ', '#12 9.337 ', '#12 9.337  NX   Successfully ran target build for project logger-service', '#12 9.337 ', '#12 9.337 ', '#12 9.406 View logs and investigate cache misses at https://nx.app/runs/dxErQT4wHl', '#12 9.406 ', '#12 DONE 9.7s', '', '#13 [ 9/10] WORKDIR /app/apps/logger-service/dist', '#13 DONE 0.0s', '', '#14 [10/10] RUN rm -rf /app/node_modules/.cache /app/.nx', '#14 DONE 0.1s', '', '#15 exporting to image', '#15 exporting layers', '#15 exporting layers 3.5s done', '#15 writing image sha256:74946715be81e69152a1bd6aa9630101582c4c2a80aae896872e0001a51f79e9 done', '#15 naming to docker.io/kafka-microservices/logger-service:latest done', '#15 DONE 3.5s', '', "What's Next?", '  1. Sign in to your Docker account → docker login', '  2. View a summary of image vulnerabilities and recommendations → docker scout quickview'], 'failed': False, 'item': {'name': 'logger-service', 'image': 'kafka-microservices/logger-service:latest', 'replicas': 1}, 'ansible_loop_var': 'item'}) => 
+  msg: 'Built image: kafka-microservices/logger-service:latest'
+2025-06-22 09:26:01,698 p=12842 u=trannhatsang n=ansible INFO| TASK [Deploy infrastructure] ***************************************************************************************************************************
+2025-06-22 09:26:01,712 p=12842 u=trannhatsang n=ansible INFO| included: /Users/trannhatsang/Documents/Programming/Kafka/kafka-microservices/ansible/tasks/deploy-infrastructure.yml for localhost
+2025-06-22 09:26:01,716 p=12842 u=trannhatsang n=ansible INFO| TASK [Create namespace] ********************************************************************************************************************************
+2025-06-22 09:26:02,096 p=12842 u=trannhatsang n=ansible INFO| fatal: [localhost]: FAILED! => changed=false 
+  msg: Failed to import the required Python library (kubernetes) on MacOSs-MacBook-Pro.local's Python /opt/homebrew/opt/python@3.13/bin/python3.13. Please read the module documentation and install it in the appropriate location. If the required library is installed, but Ansible is using the wrong Python interpreter, please consult the documentation on ansible_python_interpreter
+2025-06-22 09:26:02,097 p=12842 u=trannhatsang n=ansible INFO| PLAY RECAP *********************************************************************************************************************************************
+2025-06-22 09:26:02,097 p=12842 u=trannhatsang n=ansible INFO| localhost                  : ok=11   changed=2    unreachable=0    failed=1    skipped=2    rescued=0    ignored=0   

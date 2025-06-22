@@ -1,0 +1,133 @@
+- name: Create namespace
+  kubernetes.core.k8s:
+    name: '{{ k8s_namespace }}'
+    api_version: v1
+    kind: Namespace
+    state: present
+
+- name: Deploy ConfigMap
+  kubernetes.core.k8s:
+    definition:
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: app-config
+        namespace: '{{ k8s_namespace }}'
+      data:
+        DB_HOST: 'postgres-service'
+        DB_PORT: '5432'
+        DB_USERNAME: 'postgres'
+        DB_NAME: 'orders_db'
+        KAFKA_BROKERS: 'kafka-service:9092'
+        KAFKA_CLIENT_ID: 'kafka-microservices'
+    state: present
+
+- name: Deploy Secrets
+  kubernetes.core.k8s:
+    definition:
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: app-secrets
+        namespace: '{{ k8s_namespace }}'
+      type: Opaque
+      data:
+        DB_PASSWORD: "{{ 'postgres' | b64encode }}"
+    state: present
+
+- name: Deploy PostgreSQL PVC
+  kubernetes.core.k8s:
+    definition:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: postgres-pvc
+        namespace: '{{ k8s_namespace }}'
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 2Gi
+    state: present
+
+- name: Deploy PostgreSQL
+  kubernetes.core.k8s:
+    definition:
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: postgres
+        namespace: '{{ k8s_namespace }}'
+      spec:
+        replicas: 1
+        selector:
+          matchLabels:
+            app: postgres
+        template:
+          metadata:
+            labels:
+              app: postgres
+          spec:
+            containers:
+              - name: postgres
+                image: postgres:13
+                ports:
+                  - containerPort: 5432
+                env:
+                  - name: POSTGRES_USER
+                    valueFrom:
+                      configMapKeyRef:
+                        name: app-config
+                        key: DB_USERNAME
+                  - name: POSTGRES_PASSWORD
+                    valueFrom:
+                      secretKeyRef:
+                        name: app-secrets
+                        key: DB_PASSWORD
+                  - name: POSTGRES_DB
+                    valueFrom:
+                      configMapKeyRef:
+                        name: app-config
+                        key: DB_NAME
+                volumeMounts:
+                  - name: postgres-storage
+                    mountPath: /var/lib/postgresql/data
+                resources:
+                  requests:
+                    memory: '256Mi'
+                    cpu: '250m'
+                  limits:
+                    memory: '512Mi'
+                    cpu: '500m'
+            volumes:
+              - name: postgres-storage
+                persistentVolumeClaim:
+                  claimName: postgres-pvc
+    state: present
+    wait: true
+    wait_condition:
+      type: Available
+      status: 'True'
+    wait_timeout: 300
+
+- name: Deploy PostgreSQL Service
+  kubernetes.core.k8s:
+    definition:
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: postgres-service
+        namespace: '{{ k8s_namespace }}'
+      spec:
+        selector:
+          app: postgres
+        ports:
+          - protocol: TCP
+            port: 5432
+            targetPort: 5432
+        type: ClusterIP
+    state: present
+
+- name: Deploy Zookeeper and Kafka
+  include_tasks: deploy-kafka.yml

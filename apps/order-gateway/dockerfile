@@ -1,0 +1,24 @@
+FROM node:20-alpine
+WORKDIR /app
+
+# Copy package files and install dependencies
+COPY package*.json ./
+COPY tsconfig.base.json ./
+COPY nx.json ./
+RUN npm install
+
+# Copy all source code
+COPY . .
+
+# Build the application (outputs to apps/order-gateway/dist/)
+RUN npx nx build order-gateway --prod
+
+# Move to the correct build output directory
+WORKDIR /app/apps/order-gateway/dist
+
+# Clean up unnecessary files to reduce image size
+RUN rm -rf /app/node_modules/.cache /app/.nx
+
+EXPOSE 3000
+
+CMD ["node", "main.js"]
