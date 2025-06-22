@@ -1,133 +1,136 @@
+---
 - name: Deploy Zookeeper
-  kubernetes.core.k8s:
-    definition:
-      apiVersion: apps/v1
-      kind: Deployment
-      metadata:
-        name: zookeeper
-        namespace: '{{ namespace }}'
-      spec:
-        replicas: 1
-        selector:
-          matchLabels:
+  shell: |
+    cat <<EOF | kubectl apply -f -
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: zookeeper
+      namespace: {{ k8s_namespace }}
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          app: zookeeper
+      template:
+        metadata:
+          labels:
             app: zookeeper
-        template:
-          metadata:
-            labels:
-              app: zookeeper
-          spec:
-            containers:
-              - name: zookeeper
-                image: confluentinc/cp-zookeeper:7.4.0
-                ports:
-                  - containerPort: 2181
-                env:
-                  - name: ZOOKEEPER_CLIENT_PORT
-                    value: '2181'
-                  - name: ZOOKEEPER_TICK_TIME
-                    value: '2000'
-                resources:
-                  requests:
-                    memory: '256Mi'
-                    cpu: '250m'
-                  limits:
-                    memory: '512Mi'
-                    cpu: '500m'
-    state: present
-    wait: true
-    wait_condition:
-      type: Available
-      status: 'True'
-    wait_timeout: 300
+        spec:
+          containers:
+            - name: zookeeper
+              image: confluentinc/cp-zookeeper:7.4.0
+              ports:
+                - containerPort: 2181
+              env:
+                - name: ZOOKEEPER_CLIENT_PORT
+                  value: "2181"
+                - name: ZOOKEEPER_TICK_TIME
+                  value: "2000"
+              resources:
+                requests:
+                  memory: 256Mi
+                  cpu: 250m
+                limits:
+                  memory: 512Mi
+                  cpu: 500m
+    EOF
+  changed_when: false
 
 - name: Deploy Zookeeper Service
-  kubernetes.core.k8s:
-    definition:
-      apiVersion: v1
-      kind: Service
-      metadata:
-        name: zookeeper-service
-        namespace: '{{ namespace }}'
-      spec:
-        selector:
-          app: zookeeper
-        ports:
-          - protocol: TCP
-            port: 2181
-            targetPort: 2181
-    state: present
+  shell: |
+    cat <<EOF | kubectl apply -f -
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: zookeeper-service
+      namespace: {{ k8s_namespace }}
+    spec:
+      selector:
+        app: zookeeper
+      ports:
+        - protocol: TCP
+          port: 2181
+          targetPort: 2181
+    EOF
+  changed_when: false
+
+- name: Wait for Zookeeper to be ready
+  shell: kubectl wait --for=condition=available --timeout=300s deployment/zookeeper -n {{ k8s_namespace }}
+  changed_when: false
 
 - name: Deploy Kafka
-  kubernetes.core.k8s:
-    definition:
-      apiVersion: apps/v1
-      kind: Deployment
-      metadata:
-        name: kafka
-        namespace: '{{ namespace }}'
-      spec:
-        replicas: 1
-        selector:
-          matchLabels:
+  shell: |
+    cat <<EOF | kubectl apply -f -
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: kafka
+      namespace: {{ k8s_namespace }}
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          app: kafka
+      template:
+        metadata:
+          labels:
             app: kafka
-        template:
-          metadata:
-            labels:
-              app: kafka
-          spec:
-            containers:
-              - name: kafka
-                image: confluentinc/cp-kafka:7.4.0
-                ports:
-                  - containerPort: 9092
-                  - containerPort: 29092
-                env:
-                  - name: KAFKA_BROKER_ID
-                    value: '1'
-                  - name: KAFKA_ZOOKEEPER_CONNECT
-                    value: 'zookeeper-service:2181'
-                  - name: KAFKA_ADVERTISED_LISTENERS
-                    value: 'PLAINTEXT://kafka-service:9092,PLAINTEXT_INTERNAL://kafka-service:29092'
-                  - name: KAFKA_LISTENER_SECURITY_PROTOCOL_MAP
-                    value: 'PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT'
-                  - name: KAFKA_INTER_BROKER_LISTENER_NAME
-                    value: 'PLAINTEXT_INTERNAL'
-                  - name: KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR
-                    value: '1'
-                  - name: KAFKA_AUTO_CREATE_TOPICS_ENABLE
-                    value: 'true'
-                resources:
-                  requests:
-                    memory: '512Mi'
-                    cpu: '500m'
-                  limits:
-                    memory: '1Gi'
-                    cpu: '1000m'
-    state: present
-    wait: true
-    wait_condition:
-      type: Available
-      status: 'True'
-    wait_timeout: 300
+        spec:
+          containers:
+            - name: kafka
+              image: confluentinc/cp-kafka:7.4.0
+              ports:
+                - containerPort: 9092
+                - containerPort: 29092
+              env:
+                - name: KAFKA_BROKER_ID
+                  value: "1"
+                - name: KAFKA_ZOOKEEPER_CONNECT
+                  value: zookeeper-service:2181
+                - name: KAFKA_ADVERTISED_LISTENERS
+                  value: PLAINTEXT://kafka-service:9092,PLAINTEXT_INTERNAL://kafka-service:29092
+                - name: KAFKA_LISTENER_SECURITY_PROTOCOL_MAP
+                  value: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
+                - name: KAFKA_INTER_BROKER_LISTENER_NAME
+                  value: PLAINTEXT_INTERNAL
+                - name: KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR
+                  value: "1"
+                - name: KAFKA_AUTO_CREATE_TOPICS_ENABLE
+                  value: "true"
+              resources:
+                requests:
+                  memory: 512Mi
+                  cpu: 500m
+                limits:
+                  memory: 1Gi
+                  cpu: 1000m
+    EOF
+  changed_when: false
 
 - name: Deploy Kafka Service
-  kubernetes.core.k8s:
-    definition:
-      apiVersion: v1
-      kind: Service
-      metadata:
-        name: kafka-service
-        namespace: '{{ namespace }}'
-      spec:
-        selector:
-          app: kafka
-        ports:
-          - name: kafka
-            protocol: TCP
-            port: 9092
-            targetPort: 9092
-          - name: kafka-internal
-            protocol: TCP
-            port: 29092
-            targetPort: 29092
-    state: present
+  shell: |
+    cat <<EOF | kubectl apply -f -
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: kafka-service
+      namespace: {{ k8s_namespace }}
+    spec:
+      selector:
+        app: kafka
+      ports:
+        - name: kafka
+          protocol: TCP
+          port: 9092
+          targetPort: 9092
+        - name: kafka-internal
+          protocol: TCP
+          port: 29092
+          targetPort: 29092
+    EOF
+  changed_when: false
+
+- name: Wait for Kafka to be ready
+  shell: kubectl wait --for=condition=available --timeout=300s deployment/kafka -n {{ k8s_namespace }}
+  changed_when: false

@@ -1,5 +1,4 @@
----
-- name: Deploy Kafka UI
+- name: Deploy Kafka UI using kubectl
   shell: |
     cat <<EOF | kubectl apply -f -
     apiVersion: apps/v1
@@ -30,7 +29,7 @@
     EOF
   changed_when: false
 
-- name: Deploy Kafka UI Service
+- name: Deploy Kafka UI Service using kubectl
   shell: |
     cat <<EOF | kubectl apply -f -
     apiVersion: v1
@@ -48,3 +47,17 @@
       type: NodePort
     EOF
   changed_when: false
+
+- name: Get service information
+  shell: |
+    echo "Order Gateway: $(kubectl get svc order-gateway-service -n {{ k8s_namespace }} -o jsonpath='{.spec.ports[0].nodePort}' 2>/dev/null || echo 'Not ready')"
+    echo "Kafka UI: $(kubectl get svc kafka-ui-service -n {{ k8s_namespace }} -o jsonpath='{.spec.ports[0].nodePort}' 2>/dev/null || echo 'Not ready')"
+  register: service_info
+  changed_when: false
+
+- name: Display service URLs
+  debug:
+    msg:
+      - '🚀 Deployment completed successfully!'
+      - '📱 Access your services at http://{{ minikube_ip }}:<nodeport>'
+      - '{{ service_info.stdout_lines }}'

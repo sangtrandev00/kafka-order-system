@@ -1,0 +1,660 @@
+🔍 Kubernetes Troubleshooting Guide for Kafka Microservices
+============================================================
+
+📊 1. CHECKING POD STATUS
+=========================
+Current pod status:
+NAME                                    READY   STATUS             RESTARTS        AGE   IP             NODE       NOMINATED NODE   READINESS GATES
+kafka-67c59c9bbf-d5rlr                  1/1     Running            0               10m   10.244.0.103   minikube   <none>           <none>
+kafka-ui-7bf56b5c7c-kd4z7               1/1     Running            0               10m   10.244.0.110   minikube   <none>           <none>
+logger-service-d46f97f5b-c5zfd          0/1     CrashLoopBackOff   6 (3m8s ago)    10m   10.244.0.109   minikube   <none>           <none>
+notification-service-68cd8556d5-265xn   0/1     CrashLoopBackOff   6 (3m13s ago)   10m   10.244.0.108   minikube   <none>           <none>
+order-gateway-fd7885c9f-4rlgr           0/1     CrashLoopBackOff   6 (88s ago)     10m   10.244.0.105   minikube   <none>           <none>
+order-gateway-fd7885c9f-rkt89           0/1     CrashLoopBackOff   6 (97s ago)     10m   10.244.0.104   minikube   <none>           <none>
+order-service-5f7698fdb-54lt7           0/1     CrashLoopBackOff   6 (3m22s ago)   10m   10.244.0.106   minikube   <none>           <none>
+order-service-5f7698fdb-hlls5           0/1     CrashLoopBackOff   6 (3m9s ago)    10m   10.244.0.107   minikube   <none>           <none>
+postgres-78c679f78c-g5qlz               1/1     Running            0               11m   10.244.0.101   minikube   <none>           <none>
+zookeeper-5c664f7f5-6vqzx               1/1     Running            0               11m   10.244.0.102   minikube   <none>           <none>
+
+📋 2. GETTING DETAILED POD DESCRIPTIONS
+=======================================
+
+--- Pod: kafka-67c59c9bbf-d5rlr ---
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  10m   default-scheduler  Successfully assigned kafka-microservices/kafka-67c59c9bbf-d5rlr to minikube
+  Normal  Pulling    10m   kubelet            Pulling image "confluentinc/cp-kafka:7.4.0"
+  Normal  Pulled     10m   kubelet            Successfully pulled image "confluentinc/cp-kafka:7.4.0" in 9.445s (9.445s including waiting). Image size: 863943932 bytes.
+  Normal  Created    10m   kubelet            Created container: kafka
+  Normal  Started    10m   kubelet            Started container kafka
+
+--- Pod: kafka-ui-7bf56b5c7c-kd4z7 ---
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  10m   default-scheduler  Successfully assigned kafka-microservices/kafka-ui-7bf56b5c7c-kd4z7 to minikube
+  Normal  Pulling    10m   kubelet            Pulling image "provectuslabs/kafka-ui:latest"
+  Normal  Pulled     10m   kubelet            Successfully pulled image "provectuslabs/kafka-ui:latest" in 15.891s (15.891s including waiting). Image size: 262105516 bytes.
+  Normal  Created    10m   kubelet            Created container: kafka-ui
+  Normal  Started    10m   kubelet            Started container kafka-ui
+
+--- Pod: logger-service-d46f97f5b-c5zfd ---
+Events:
+  Type     Reason     Age                     From               Message
+  ----     ------     ----                    ----               -------
+  Normal   Scheduled  10m                     default-scheduler  Successfully assigned kafka-microservices/logger-service-d46f97f5b-c5zfd to minikube
+  Warning  BackOff    3m51s (x26 over 9m57s)  kubelet            Back-off restarting failed container logger-service in pod logger-service-d46f97f5b-c5zfd_kafka-microservices(a842d3d5-5312-4e5d-908b-bae20eb28987)
+  Normal   Pulled     3m22s (x7 over 10m)     kubelet            Container image "kafka-microservices/logger-service:latest" already present on machine
+  Normal   Created    3m22s (x7 over 10m)     kubelet            Created container: logger-service
+  Normal   Started    3m21s (x7 over 10m)     kubelet            Started container logger-service
+
+--- Pod: notification-service-68cd8556d5-265xn ---
+Events:
+  Type     Reason     Age                     From               Message
+  ----     ------     ----                    ----               -------
+  Normal   Scheduled  10m                     default-scheduler  Successfully assigned kafka-microservices/notification-service-68cd8556d5-265xn to minikube
+  Warning  BackOff    3m40s (x26 over 9m56s)  kubelet            Back-off restarting failed container notification-service in pod notification-service-68cd8556d5-265xn_kafka-microservices(e7324b4c-49ee-4234-ba68-62ba57e4eb05)
+  Normal   Pulled     3m25s (x7 over 10m)     kubelet            Container image "kafka-microservices/notification-service:latest" already present on machine
+  Normal   Created    3m25s (x7 over 10m)     kubelet            Created container: notification-service
+  Normal   Started    3m25s (x7 over 10m)     kubelet            Started container notification-service
+
+--- Pod: order-gateway-fd7885c9f-4rlgr ---
+Events:
+  Type     Reason     Age                   From               Message
+  ----     ------     ----                  ----               -------
+  Normal   Scheduled  10m                   default-scheduler  Successfully assigned kafka-microservices/order-gateway-fd7885c9f-4rlgr to minikube
+  Normal   Pulled     2m6s (x7 over 10m)    kubelet            Container image "kafka-microservices/order-gateway:latest" already present on machine
+  Normal   Created    2m6s (x7 over 10m)    kubelet            Created container: order-gateway
+  Normal   Started    2m6s (x7 over 10m)    kubelet            Started container order-gateway
+  Warning  BackOff    87s (x26 over 9m34s)  kubelet            Back-off restarting failed container order-gateway in pod order-gateway-fd7885c9f-4rlgr_kafka-microservices(4431bebc-3ae6-4dbc-9a57-432497b39991)
+
+--- Pod: order-gateway-fd7885c9f-rkt89 ---
+Events:
+  Type     Reason     Age                     From               Message
+  ----     ------     ----                    ----               -------
+  Normal   Scheduled  10m                     default-scheduler  Successfully assigned kafka-microservices/order-gateway-fd7885c9f-rkt89 to minikube
+  Warning  BackOff    2m30s (x26 over 9m28s)  kubelet            Back-off restarting failed container order-gateway in pod order-gateway-fd7885c9f-rkt89_kafka-microservices(1c7a23f5-aca7-4e0f-9b49-36e9702937eb)
+  Normal   Pulled     2m2s (x7 over 10m)      kubelet            Container image "kafka-microservices/order-gateway:latest" already present on machine
+  Normal   Created    2m2s (x7 over 10m)      kubelet            Created container: order-gateway
+  Normal   Started    2m2s (x7 over 10m)      kubelet            Started container order-gateway
+
+--- Pod: order-service-5f7698fdb-54lt7 ---
+Events:
+  Type     Reason     Age                     From               Message
+  ----     ------     ----                    ----               -------
+  Normal   Scheduled  10m                     default-scheduler  Successfully assigned kafka-microservices/order-service-5f7698fdb-54lt7 to minikube
+  Normal   Pulled     3m38s (x7 over 10m)     kubelet            Container image "kafka-microservices/order-service:latest" already present on machine
+  Normal   Created    3m38s (x7 over 10m)     kubelet            Created container: order-service
+  Normal   Started    3m38s (x7 over 10m)     kubelet            Started container order-service
+  Warning  BackOff    3m20s (x26 over 9m58s)  kubelet            Back-off restarting failed container order-service in pod order-service-5f7698fdb-54lt7_kafka-microservices(07e504b9-2570-4d25-b404-109ced23be3d)
+
+--- Pod: order-service-5f7698fdb-hlls5 ---
+Events:
+  Type     Reason     Age                     From               Message
+  ----     ------     ----                    ----               -------
+  Normal   Scheduled  10m                     default-scheduler  Successfully assigned kafka-microservices/order-service-5f7698fdb-hlls5 to minikube
+  Warning  BackOff    3m39s (x26 over 9m58s)  kubelet            Back-off restarting failed container order-service in pod order-service-5f7698fdb-hlls5_kafka-microservices(6164ac4d-0742-4ed7-9d13-5cc289eb3518)
+  Normal   Pulled     3m24s (x7 over 10m)     kubelet            Container image "kafka-microservices/order-service:latest" already present on machine
+  Normal   Created    3m24s (x7 over 10m)     kubelet            Created container: order-service
+  Normal   Started    3m24s (x7 over 10m)     kubelet            Started container order-service
+
+--- Pod: postgres-78c679f78c-g5qlz ---
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  11m   default-scheduler  Successfully assigned kafka-microservices/postgres-78c679f78c-g5qlz to minikube
+  Normal  Pulling    11m   kubelet            Pulling image "postgres:13"
+  Normal  Pulled     11m   kubelet            Successfully pulled image "postgres:13" in 14.371s (14.371s including waiting). Image size: 444550626 bytes.
+  Normal  Created    11m   kubelet            Created container: postgres
+  Normal  Started    11m   kubelet            Started container postgres
+
+--- Pod: zookeeper-5c664f7f5-6vqzx ---
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  11m   default-scheduler  Successfully assigned kafka-microservices/zookeeper-5c664f7f5-6vqzx to minikube
+  Normal  Pulling    11m   kubelet            Pulling image "confluentinc/cp-zookeeper:7.4.0"
+  Normal  Pulled     10m   kubelet            Successfully pulled image "confluentinc/cp-zookeeper:7.4.0" in 24.397s (38.613s including waiting). Image size: 863942729 bytes.
+  Normal  Created    10m   kubelet            Created container: zookeeper
+  Normal  Started    10m   kubelet            Started container zookeeper
+
+📜 3. CHECKING CONTAINER LOGS
+=============================
+
+--- Logs for order-gateway ---
+Pod: order-gateway-fd7885c9f-4rlgr
+Recent logs:
+[32m[Nest] 1  - [39m06/22/2025, 4:03:31 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/orders, POST} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 1  - [39m06/22/2025, 4:03:31 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/orders/:id, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 1  - [39m06/22/2025, 4:03:31 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/orders, GET} route[39m[38;5;3m +0ms[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:03:31 AM [31m  ERROR[39m [38;5;3m[ClientKafka] [39m[31mERROR [Connection] Connection error:  {"timestamp":"2025-06-22T04:03:31.772Z","logger":"kafkajs","broker":"localhost:9092","clientId":"order-gateway-client","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1122:18)\n    at afterConnectMultiple (node:net:1689:7)"}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:03:31 AM [31m  ERROR[39m [38;5;3m[ClientKafka] [39m[31mERROR [BrokerPool] Failed to connect to seed broker, trying another broker from the list: Connection error:  {"timestamp":"2025-06-22T04:03:31.773Z","logger":"kafkajs","retryCount":0,"retryTime":119}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:03:31 AM [31m  ERROR[39m [38;5;3m[ClientKafka] [39m[31mERROR [Connection] Connection error:  {"timestamp":"2025-06-22T04:03:31.894Z","logger":"kafkajs","broker":"localhost:9092","clientId":"order-gateway-client","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1122:18)\n    at afterConnectMultiple (node:net:1689:7)"}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:03:31 AM [31m  ERROR[39m [38;5;3m[ClientKafka] [39m[31mERROR [BrokerPool] Failed to connect to seed broker, trying another broker from the list: Connection error:  {"timestamp":"2025-06-22T04:03:31.895Z","logger":"kafkajs","retryCount":1,"retryTime":248}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:03:32 AM [31m  ERROR[39m [38;5;3m[ClientKafka] [39m[31mERROR [Connection] Connection error:  {"timestamp":"2025-06-22T04:03:32.147Z","logger":"kafkajs","broker":"localhost:9092","clientId":"order-gateway-client","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1122:18)\n    at afterConnectMultiple (node:net:1689:7)"}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:03:32 AM [31m  ERROR[39m [38;5;3m[ClientKafka] [39m[31mERROR [BrokerPool] Failed to connect to seed broker, trying another broker from the list: Connection error:  {"timestamp":"2025-06-22T04:03:32.149Z","logger":"kafkajs","retryCount":2,"retryTime":576}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:03:32 AM [31m  ERROR[39m [38;5;3m[ClientKafka] [39m[31mERROR [Connection] Connection error:  {"timestamp":"2025-06-22T04:03:32.731Z","logger":"kafkajs","broker":"localhost:9092","clientId":"order-gateway-client","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1122:18)\n    at afterConnectMultiple (node:net:1689:7)"}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:03:32 AM [31m  ERROR[39m [38;5;3m[ClientKafka] [39m[31mERROR [BrokerPool] Failed to connect to seed broker, trying another broker from the list: Connection error:  {"timestamp":"2025-06-22T04:03:32.733Z","logger":"kafkajs","retryCount":3,"retryTime":1304}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:03:34 AM [31m  ERROR[39m [38;5;3m[ClientKafka] [39m[31mERROR [Connection] Connection error:  {"timestamp":"2025-06-22T04:03:34.042Z","logger":"kafkajs","broker":"localhost:9092","clientId":"order-gateway-client","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1122:18)\n    at afterConnectMultiple (node:net:1689:7)"}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:03:34 AM [31m  ERROR[39m [38;5;3m[ClientKafka] [39m[31mERROR [BrokerPool] Failed to connect to seed broker, trying another broker from the list: Connection error:  {"timestamp":"2025-06-22T04:03:34.042Z","logger":"kafkajs","retryCount":4,"retryTime":2388}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:03:36 AM [31m  ERROR[39m [38;5;3m[ClientKafka] [39m[31mERROR [Connection] Connection error:  {"timestamp":"2025-06-22T04:03:36.436Z","logger":"kafkajs","broker":"localhost:9092","clientId":"order-gateway-client","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1122:18)\n    at afterConnectMultiple (node:net:1689:7)"}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:03:36 AM [31m  ERROR[39m [38;5;3m[ClientKafka] [39m[31mERROR [BrokerPool] Failed to connect to seed broker, trying another broker from the list: Connection error:  {"timestamp":"2025-06-22T04:03:36.437Z","logger":"kafkajs","retryCount":5,"retryTime":5062}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:03:41 AM [31m  ERROR[39m [38;5;3m[ClientKafka] [39m[31mERROR [Connection] Connection error:  {"timestamp":"2025-06-22T04:03:41.504Z","logger":"kafkajs","broker":"localhost:9092","clientId":"order-gateway-client","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1122:18)\n    at afterConnectMultiple (node:net:1689:7)"}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:03:41 AM [31m  ERROR[39m [38;5;3m[ClientKafka] [39m[31mERROR [BrokerPool] Failed to connect to seed broker, trying another broker from the list: Connection error:  {"timestamp":"2025-06-22T04:03:41.506Z","logger":"kafkajs","retryCount":6,"retryTime":9070}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:03:50 AM [31m  ERROR[39m [38;5;3m[ClientKafka] [39m[31mERROR [Connection] Connection error:  {"timestamp":"2025-06-22T04:03:50.583Z","logger":"kafkajs","broker":"localhost:9092","clientId":"order-gateway-client","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1122:18)\n    at afterConnectMultiple (node:net:1689:7)"}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:03:50 AM [31m  ERROR[39m [38;5;3m[ClientKafka] [39m[31mERROR [BrokerPool] Failed to connect to seed broker, trying another broker from the list: Connection error:  {"timestamp":"2025-06-22T04:03:50.584Z","logger":"kafkajs","retryCount":7,"retryTime":18168}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:04:08 AM [31m  ERROR[39m [38;5;3m[ClientKafka] [39m[31mERROR [Connection] Connection error:  {"timestamp":"2025-06-22T04:04:08.765Z","logger":"kafkajs","broker":"localhost:9092","clientId":"order-gateway-client","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1122:18)\n    at afterConnectMultiple (node:net:1689:7)"}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:04:08 AM [31m  ERROR[39m [38;5;3m[ClientKafka] [39m[31mERROR [BrokerPool] Failed to connect to seed broker, trying another broker from the list: Connection error:  {"timestamp":"2025-06-22T04:04:08.768Z","logger":"kafkajs","retryCount":8,"retryTime":30000}[39m
+node:internal/process/promises:391
+    triggerUncaughtException(err, true /* fromPromise */);
+    ^
+
+KafkaJSNonRetriableError
+  Caused by: KafkaJSConnectionError: Connection error: 
+    at Socket.onError (/app/node_modules/kafkajs/src/network/connection.js:210:23)
+    ... 3 lines matching cause stack trace ...
+    at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+  name: 'KafkaJSNumberOfRetriesExceeded',
+  retriable: false,
+  helpUrl: undefined,
+  retryCount: 8,
+  retryTime: 30000,
+  [cause]: KafkaJSConnectionError: Connection error: 
+      at Socket.onError (/app/node_modules/kafkajs/src/network/connection.js:210:23)
+      at Socket.emit (node:events:524:28)
+      at emitErrorNT (node:internal/streams/destroy:169:8)
+      at emitErrorCloseNT (node:internal/streams/destroy:128:3)
+      at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+    retriable: true,
+    helpUrl: undefined,
+    broker: 'localhost:9092',
+    code: 'ECONNREFUSED',
+    [cause]: undefined
+  }
+}
+
+Node.js v20.19.2
+
+Previous container logs (if crashed):
+  name: 'KafkaJSNumberOfRetriesExceeded',
+  retriable: false,
+  helpUrl: undefined,
+  retryCount: 8,
+  retryTime: 30000,
+  [cause]: KafkaJSConnectionError: Connection error: 
+      at Socket.onError (/app/node_modules/kafkajs/src/network/connection.js:210:23)
+      at Socket.emit (node:events:524:28)
+      at emitErrorNT (node:internal/streams/destroy:169:8)
+      at emitErrorCloseNT (node:internal/streams/destroy:128:3)
+      at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+    retriable: true,
+    helpUrl: undefined,
+    broker: 'localhost:9092',
+    code: 'ECONNREFUSED',
+    [cause]: undefined
+  }
+}
+
+Node.js v20.19.2
+----------------------------------------
+
+--- Logs for order-service ---
+Pod: order-service-5f7698fdb-54lt7
+Recent logs:
+query: SELECT "con"."conname" AS "constraint_name", "con"."nspname" AS "table_schema", "con"."relname" AS "table_name", "att2"."attname" AS "column_name", "ns"."nspname" AS "referenced_table_schema", "cl"."relname" AS "referenced_table_name", "att"."attname" AS "referenced_column_name", "con"."confdeltype" AS "on_delete", "con"."confupdtype" AS "on_update", "con"."condeferrable" AS "deferrable", "con"."condeferred" AS "deferred" FROM ( SELECT UNNEST ("con1"."conkey") AS "parent", UNNEST ("con1"."confkey") AS "child", "con1"."confrelid", "con1"."conrelid", "con1"."conname", "con1"."contype", "ns"."nspname", "cl"."relname", "con1"."condeferrable", CASE WHEN "con1"."condeferred" THEN 'INITIALLY DEFERRED' ELSE 'INITIALLY IMMEDIATE' END as condeferred, CASE "con1"."confdeltype" WHEN 'a' THEN 'NO ACTION' WHEN 'r' THEN 'RESTRICT' WHEN 'c' THEN 'CASCADE' WHEN 'n' THEN 'SET NULL' WHEN 'd' THEN 'SET DEFAULT' END as "confdeltype", CASE "con1"."confupdtype" WHEN 'a' THEN 'NO ACTION' WHEN 'r' THEN 'RESTRICT' WHEN 'c' THEN 'CASCADE' WHEN 'n' THEN 'SET NULL' WHEN 'd' THEN 'SET DEFAULT' END as "confupdtype" FROM "pg_class" "cl" INNER JOIN "pg_namespace" "ns" ON "cl"."relnamespace" = "ns"."oid" INNER JOIN "pg_constraint" "con1" ON "con1"."conrelid" = "cl"."oid" WHERE "con1"."contype" = 'f' AND (("ns"."nspname" = 'public' AND "cl"."relname" = 'orders')) ) "con" INNER JOIN "pg_attribute" "att" ON "att"."attrelid" = "con"."confrelid" AND "att"."attnum" = "con"."child" INNER JOIN "pg_class" "cl" ON "cl"."oid" = "con"."confrelid"  AND "cl"."relispartition" = 'f'INNER JOIN "pg_namespace" "ns" ON "cl"."relnamespace" = "ns"."oid" INNER JOIN "pg_attribute" "att2" ON "att2"."attrelid" = "con"."conrelid" AND "att2"."attnum" = "con"."parent"
+query: SELECT "udt_schema", "udt_name" FROM "information_schema"."columns" WHERE "table_schema" = 'public' AND "table_name" = 'orders' AND "column_name"='status'
+query: SELECT "e"."enumlabel" AS "value" FROM "pg_enum" "e" INNER JOIN "pg_type" "t" ON "t"."oid" = "e"."enumtypid" INNER JOIN "pg_namespace" "n" ON "n"."oid" = "t"."typnamespace" WHERE "n"."nspname" = 'public' AND "t"."typname" = 'orders_status_enum'
+query: SELECT * FROM "information_schema"."tables" WHERE "table_schema" = 'public' AND "table_name" = 'typeorm_metadata'
+query: COMMIT
+[32m[Nest] 1  - [39m06/22/2025, 4:02:01 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmCoreModule dependencies initialized[39m[38;5;3m +402ms[39m
+[32m[Nest] 1  - [39m06/22/2025, 4:02:01 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 1  - [39m06/22/2025, 4:02:01 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAppModule dependencies initialized[39m[38;5;3m +0ms[39m
+[33m[Nest] 1  - [39m06/22/2025, 4:02:02 AM [33m   WARN[39m [38;5;3m[ServerKafka] [39m[33mWARN [undefined] KafkaJS v2.0.0 switched default partitioner. To retain the same partitioning behavior as in previous versions, create the producer with the option "createPartitioner: Partitioners.LegacyPartitioner". See the migration guide at https://kafka.js.org/docs/migration-guide-v2.0.0#producer-new-default-partitioner for details. Silence this warning by setting the environment variable "KAFKAJS_NO_PARTITIONER_WARNING=1" {"timestamp":"2025-06-22T04:02:02.271Z","logger":"kafkajs"}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:02:02 AM [31m  ERROR[39m [38;5;3m[ServerKafka] [39m[31mERROR [Connection] Connection error:  {"timestamp":"2025-06-22T04:02:02.291Z","logger":"kafkajs","broker":"localhost:9092","clientId":"order-service-server","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1122:18)\n    at afterConnectMultiple (node:net:1689:7)"}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:02:02 AM [31m  ERROR[39m [38;5;3m[ServerKafka] [39m[31mERROR [BrokerPool] Failed to connect to seed broker, trying another broker from the list: Connection error:  {"timestamp":"2025-06-22T04:02:02.294Z","logger":"kafkajs","retryCount":0,"retryTime":348}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:02:02 AM [31m  ERROR[39m [38;5;3m[ServerKafka] [39m[31mERROR [Connection] Connection error:  {"timestamp":"2025-06-22T04:02:02.646Z","logger":"kafkajs","broker":"localhost:9092","clientId":"order-service-server","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1122:18)\n    at afterConnectMultiple (node:net:1689:7)"}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:02:02 AM [31m  ERROR[39m [38;5;3m[ServerKafka] [39m[31mERROR [BrokerPool] Failed to connect to seed broker, trying another broker from the list: Connection error:  {"timestamp":"2025-06-22T04:02:02.646Z","logger":"kafkajs","retryCount":1,"retryTime":834}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:02:03 AM [31m  ERROR[39m [38;5;3m[ServerKafka] [39m[31mERROR [Connection] Connection error:  {"timestamp":"2025-06-22T04:02:03.480Z","logger":"kafkajs","broker":"localhost:9092","clientId":"order-service-server","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1122:18)\n    at afterConnectMultiple (node:net:1689:7)"}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:02:03 AM [31m  ERROR[39m [38;5;3m[ServerKafka] [39m[31mERROR [BrokerPool] Failed to connect to seed broker, trying another broker from the list: Connection error:  {"timestamp":"2025-06-22T04:02:03.481Z","logger":"kafkajs","retryCount":2,"retryTime":1790}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:02:05 AM [31m  ERROR[39m [38;5;3m[ServerKafka] [39m[31mERROR [Connection] Connection error:  {"timestamp":"2025-06-22T04:02:05.274Z","logger":"kafkajs","broker":"localhost:9092","clientId":"order-service-server","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1122:18)\n    at afterConnectMultiple (node:net:1689:7)"}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:02:05 AM [31m  ERROR[39m [38;5;3m[ServerKafka] [39m[31mERROR [BrokerPool] Failed to connect to seed broker, trying another broker from the list: Connection error:  {"timestamp":"2025-06-22T04:02:05.275Z","logger":"kafkajs","retryCount":3,"retryTime":2994}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:02:08 AM [31m  ERROR[39m [38;5;3m[ServerKafka] [39m[31mERROR [Connection] Connection error:  {"timestamp":"2025-06-22T04:02:08.279Z","logger":"kafkajs","broker":"localhost:9092","clientId":"order-service-server","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1122:18)\n    at afterConnectMultiple (node:net:1689:7)"}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:02:08 AM [31m  ERROR[39m [38;5;3m[ServerKafka] [39m[31mERROR [BrokerPool] Failed to connect to seed broker, trying another broker from the list: Connection error:  {"timestamp":"2025-06-22T04:02:08.281Z","logger":"kafkajs","retryCount":4,"retryTime":5708}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:02:13 AM [31m  ERROR[39m [38;5;3m[ServerKafka] [39m[31mERROR [Connection] Connection error:  {"timestamp":"2025-06-22T04:02:13.997Z","logger":"kafkajs","broker":"localhost:9092","clientId":"order-service-server","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1122:18)\n    at afterConnectMultiple (node:net:1689:7)"}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:02:14 AM [31m  ERROR[39m [38;5;3m[ServerKafka] [39m[31mERROR [BrokerPool] Failed to connect to seed broker, trying another broker from the list: Connection error:  {"timestamp":"2025-06-22T04:02:14.000Z","logger":"kafkajs","retryCount":5,"retryTime":9184}[39m
+node:internal/process/promises:391
+    triggerUncaughtException(err, true /* fromPromise */);
+    ^
+
+KafkaJSNonRetriableError
+  Caused by: KafkaJSConnectionError: Connection error: 
+    at Socket.onError (/app/node_modules/kafkajs/src/network/connection.js:210:23)
+    ... 3 lines matching cause stack trace ...
+    at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+  name: 'KafkaJSNumberOfRetriesExceeded',
+  retriable: false,
+  helpUrl: undefined,
+  retryCount: 5,
+  retryTime: 9184,
+  [cause]: KafkaJSConnectionError: Connection error: 
+      at Socket.onError (/app/node_modules/kafkajs/src/network/connection.js:210:23)
+      at Socket.emit (node:events:524:28)
+      at emitErrorNT (node:internal/streams/destroy:169:8)
+      at emitErrorCloseNT (node:internal/streams/destroy:128:3)
+      at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+    retriable: true,
+    helpUrl: undefined,
+    broker: 'localhost:9092',
+    code: 'ECONNREFUSED',
+    [cause]: undefined
+  }
+}
+
+Node.js v20.19.2
+
+Previous container logs (if crashed):
+  name: 'KafkaJSNumberOfRetriesExceeded',
+  retriable: false,
+  helpUrl: undefined,
+  retryCount: 5,
+  retryTime: 9184,
+  [cause]: KafkaJSConnectionError: Connection error: 
+      at Socket.onError (/app/node_modules/kafkajs/src/network/connection.js:210:23)
+      at Socket.emit (node:events:524:28)
+      at emitErrorNT (node:internal/streams/destroy:169:8)
+      at emitErrorCloseNT (node:internal/streams/destroy:128:3)
+      at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+    retriable: true,
+    helpUrl: undefined,
+    broker: 'localhost:9092',
+    code: 'ECONNREFUSED',
+    [cause]: undefined
+  }
+}
+
+Node.js v20.19.2
+----------------------------------------
+
+--- Logs for notification-service ---
+Pod: notification-service-68cd8556d5-265xn
+Recent logs:
+[32m[Nest] 1  - [39m06/22/2025, 4:02:14 AM [32m    LOG[39m [38;5;3m[NestFactory] [39m[32mStarting Nest application...[39m
+[32m[Nest] 1  - [39m06/22/2025, 4:02:14 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigHostModule dependencies initialized[39m[38;5;3m +95ms[39m
+[32m[Nest] 1  - [39m06/22/2025, 4:02:14 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAppModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 1  - [39m06/22/2025, 4:02:14 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigModule dependencies initialized[39m[38;5;3m +0ms[39m
+[33m[Nest] 1  - [39m06/22/2025, 4:02:15 AM [33m   WARN[39m [38;5;3m[ServerKafka] [39m[33mWARN [undefined] KafkaJS v2.0.0 switched default partitioner. To retain the same partitioning behavior as in previous versions, create the producer with the option "createPartitioner: Partitioners.LegacyPartitioner". See the migration guide at https://kafka.js.org/docs/migration-guide-v2.0.0#producer-new-default-partitioner for details. Silence this warning by setting the environment variable "KAFKAJS_NO_PARTITIONER_WARNING=1" {"timestamp":"2025-06-22T04:02:15.480Z","logger":"kafkajs"}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:02:15 AM [31m  ERROR[39m [38;5;3m[ServerKafka] [39m[31mERROR [Connection] Connection error:  {"timestamp":"2025-06-22T04:02:15.743Z","logger":"kafkajs","broker":"localhost:9092","clientId":"notification-service-server","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1122:18)\n    at afterConnectMultiple (node:net:1689:7)"}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:02:15 AM [31m  ERROR[39m [38;5;3m[ServerKafka] [39m[31mERROR [BrokerPool] Failed to connect to seed broker, trying another broker from the list: Connection error:  {"timestamp":"2025-06-22T04:02:15.746Z","logger":"kafkajs","retryCount":0,"retryTime":267}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:02:16 AM [31m  ERROR[39m [38;5;3m[ServerKafka] [39m[31mERROR [Connection] Connection error:  {"timestamp":"2025-06-22T04:02:16.015Z","logger":"kafkajs","broker":"localhost:9092","clientId":"notification-service-server","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1122:18)\n    at afterConnectMultiple (node:net:1689:7)"}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:02:16 AM [31m  ERROR[39m [38;5;3m[ServerKafka] [39m[31mERROR [BrokerPool] Failed to connect to seed broker, trying another broker from the list: Connection error:  {"timestamp":"2025-06-22T04:02:16.016Z","logger":"kafkajs","retryCount":1,"retryTime":480}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:02:16 AM [31m  ERROR[39m [38;5;3m[ServerKafka] [39m[31mERROR [Connection] Connection error:  {"timestamp":"2025-06-22T04:02:16.496Z","logger":"kafkajs","broker":"localhost:9092","clientId":"notification-service-server","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1122:18)\n    at afterConnectMultiple (node:net:1689:7)"}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:02:16 AM [31m  ERROR[39m [38;5;3m[ServerKafka] [39m[31mERROR [BrokerPool] Failed to connect to seed broker, trying another broker from the list: Connection error:  {"timestamp":"2025-06-22T04:02:16.497Z","logger":"kafkajs","retryCount":2,"retryTime":998}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:02:17 AM [31m  ERROR[39m [38;5;3m[ServerKafka] [39m[31mERROR [Connection] Connection error:  {"timestamp":"2025-06-22T04:02:17.497Z","logger":"kafkajs","broker":"localhost:9092","clientId":"notification-service-server","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1122:18)\n    at afterConnectMultiple (node:net:1689:7)"}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:02:17 AM [31m  ERROR[39m [38;5;3m[ServerKafka] [39m[31mERROR [BrokerPool] Failed to connect to seed broker, trying another broker from the list: Connection error:  {"timestamp":"2025-06-22T04:02:17.498Z","logger":"kafkajs","retryCount":3,"retryTime":1872}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:02:19 AM [31m  ERROR[39m [38;5;3m[ServerKafka] [39m[31mERROR [Connection] Connection error:  {"timestamp":"2025-06-22T04:02:19.383Z","logger":"kafkajs","broker":"localhost:9092","clientId":"notification-service-server","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1122:18)\n    at afterConnectMultiple (node:net:1689:7)"}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:02:19 AM [31m  ERROR[39m [38;5;3m[ServerKafka] [39m[31mERROR [BrokerPool] Failed to connect to seed broker, trying another broker from the list: Connection error:  {"timestamp":"2025-06-22T04:02:19.383Z","logger":"kafkajs","retryCount":4,"retryTime":4404}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:02:23 AM [31m  ERROR[39m [38;5;3m[ServerKafka] [39m[31mERROR [Connection] Connection error:  {"timestamp":"2025-06-22T04:02:23.793Z","logger":"kafkajs","broker":"localhost:9092","clientId":"notification-service-server","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1122:18)\n    at afterConnectMultiple (node:net:1689:7)"}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:02:23 AM [31m  ERROR[39m [38;5;3m[ServerKafka] [39m[31mERROR [BrokerPool] Failed to connect to seed broker, trying another broker from the list: Connection error:  {"timestamp":"2025-06-22T04:02:23.798Z","logger":"kafkajs","retryCount":5,"retryTime":10066}[39m
+node:internal/process/promises:391
+    triggerUncaughtException(err, true /* fromPromise */);
+    ^
+
+KafkaJSNonRetriableError
+  Caused by: KafkaJSConnectionError: Connection error: 
+    at Socket.onError (/app/node_modules/kafkajs/src/network/connection.js:210:23)
+    ... 3 lines matching cause stack trace ...
+    at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+  name: 'KafkaJSNumberOfRetriesExceeded',
+  retriable: false,
+  helpUrl: undefined,
+  retryCount: 5,
+  retryTime: 10066,
+  [cause]: KafkaJSConnectionError: Connection error: 
+      at Socket.onError (/app/node_modules/kafkajs/src/network/connection.js:210:23)
+      at Socket.emit (node:events:524:28)
+      at emitErrorNT (node:internal/streams/destroy:169:8)
+      at emitErrorCloseNT (node:internal/streams/destroy:128:3)
+      at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+    retriable: true,
+    helpUrl: undefined,
+    broker: 'localhost:9092',
+    code: 'ECONNREFUSED',
+    [cause]: undefined
+  }
+}
+
+Node.js v20.19.2
+
+Previous container logs (if crashed):
+  name: 'KafkaJSNumberOfRetriesExceeded',
+  retriable: false,
+  helpUrl: undefined,
+  retryCount: 5,
+  retryTime: 10066,
+  [cause]: KafkaJSConnectionError: Connection error: 
+      at Socket.onError (/app/node_modules/kafkajs/src/network/connection.js:210:23)
+      at Socket.emit (node:events:524:28)
+      at emitErrorNT (node:internal/streams/destroy:169:8)
+      at emitErrorCloseNT (node:internal/streams/destroy:128:3)
+      at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+    retriable: true,
+    helpUrl: undefined,
+    broker: 'localhost:9092',
+    code: 'ECONNREFUSED',
+    [cause]: undefined
+  }
+}
+
+Node.js v20.19.2
+----------------------------------------
+
+--- Logs for logger-service ---
+Pod: logger-service-d46f97f5b-c5zfd
+Recent logs:
+[32m[Nest] 1  - [39m06/22/2025, 4:02:17 AM [32m    LOG[39m [38;5;3m[NestFactory] [39m[32mStarting Nest application...[39m
+[32m[Nest] 1  - [39m06/22/2025, 4:02:17 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigHostModule dependencies initialized[39m[38;5;3m +10ms[39m
+[32m[Nest] 1  - [39m06/22/2025, 4:02:17 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAppModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 1  - [39m06/22/2025, 4:02:17 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigModule dependencies initialized[39m[38;5;3m +1ms[39m
+[33m[Nest] 1  - [39m06/22/2025, 4:02:17 AM [33m   WARN[39m [38;5;3m[ServerKafka] [39m[33mWARN [undefined] KafkaJS v2.0.0 switched default partitioner. To retain the same partitioning behavior as in previous versions, create the producer with the option "createPartitioner: Partitioners.LegacyPartitioner". See the migration guide at https://kafka.js.org/docs/migration-guide-v2.0.0#producer-new-default-partitioner for details. Silence this warning by setting the environment variable "KAFKAJS_NO_PARTITIONER_WARNING=1" {"timestamp":"2025-06-22T04:02:17.529Z","logger":"kafkajs"}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:02:17 AM [31m  ERROR[39m [38;5;3m[ServerKafka] [39m[31mERROR [Connection] Connection error:  {"timestamp":"2025-06-22T04:02:17.542Z","logger":"kafkajs","broker":"localhost:9092","clientId":"logger-service-server","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1122:18)\n    at afterConnectMultiple (node:net:1689:7)"}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:02:17 AM [31m  ERROR[39m [38;5;3m[ServerKafka] [39m[31mERROR [BrokerPool] Failed to connect to seed broker, trying another broker from the list: Connection error:  {"timestamp":"2025-06-22T04:02:17.543Z","logger":"kafkajs","retryCount":0,"retryTime":349}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:02:17 AM [31m  ERROR[39m [38;5;3m[ServerKafka] [39m[31mERROR [Connection] Connection error:  {"timestamp":"2025-06-22T04:02:17.895Z","logger":"kafkajs","broker":"localhost:9092","clientId":"logger-service-server","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1122:18)\n    at afterConnectMultiple (node:net:1689:7)"}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:02:17 AM [31m  ERROR[39m [38;5;3m[ServerKafka] [39m[31mERROR [BrokerPool] Failed to connect to seed broker, trying another broker from the list: Connection error:  {"timestamp":"2025-06-22T04:02:17.896Z","logger":"kafkajs","retryCount":1,"retryTime":564}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:02:18 AM [31m  ERROR[39m [38;5;3m[ServerKafka] [39m[31mERROR [Connection] Connection error:  {"timestamp":"2025-06-22T04:02:18.464Z","logger":"kafkajs","broker":"localhost:9092","clientId":"logger-service-server","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1122:18)\n    at afterConnectMultiple (node:net:1689:7)"}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:02:18 AM [31m  ERROR[39m [38;5;3m[ServerKafka] [39m[31mERROR [BrokerPool] Failed to connect to seed broker, trying another broker from the list: Connection error:  {"timestamp":"2025-06-22T04:02:18.466Z","logger":"kafkajs","retryCount":2,"retryTime":1256}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:02:19 AM [31m  ERROR[39m [38;5;3m[ServerKafka] [39m[31mERROR [Connection] Connection error:  {"timestamp":"2025-06-22T04:02:19.726Z","logger":"kafkajs","broker":"localhost:9092","clientId":"logger-service-server","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1122:18)\n    at afterConnectMultiple (node:net:1689:7)"}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:02:19 AM [31m  ERROR[39m [38;5;3m[ServerKafka] [39m[31mERROR [BrokerPool] Failed to connect to seed broker, trying another broker from the list: Connection error:  {"timestamp":"2025-06-22T04:02:19.729Z","logger":"kafkajs","retryCount":3,"retryTime":2470}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:02:22 AM [31m  ERROR[39m [38;5;3m[ServerKafka] [39m[31mERROR [Connection] Connection error:  {"timestamp":"2025-06-22T04:02:22.488Z","logger":"kafkajs","broker":"localhost:9092","clientId":"logger-service-server","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1122:18)\n    at afterConnectMultiple (node:net:1689:7)"}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:02:22 AM [31m  ERROR[39m [38;5;3m[ServerKafka] [39m[31mERROR [BrokerPool] Failed to connect to seed broker, trying another broker from the list: Connection error:  {"timestamp":"2025-06-22T04:02:22.491Z","logger":"kafkajs","retryCount":4,"retryTime":5588}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:02:28 AM [31m  ERROR[39m [38;5;3m[ServerKafka] [39m[31mERROR [Connection] Connection error:  {"timestamp":"2025-06-22T04:02:28.097Z","logger":"kafkajs","broker":"localhost:9092","clientId":"logger-service-server","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1122:18)\n    at afterConnectMultiple (node:net:1689:7)"}[39m
+[31m[Nest] 1  - [39m06/22/2025, 4:02:28 AM [31m  ERROR[39m [38;5;3m[ServerKafka] [39m[31mERROR [BrokerPool] Failed to connect to seed broker, trying another broker from the list: Connection error:  {"timestamp":"2025-06-22T04:02:28.102Z","logger":"kafkajs","retryCount":5,"retryTime":11928}[39m
+node:internal/process/promises:391
+    triggerUncaughtException(err, true /* fromPromise */);
+    ^
+
+KafkaJSNonRetriableError
+  Caused by: KafkaJSConnectionError: Connection error: 
+    at Socket.onError (/app/node_modules/kafkajs/src/network/connection.js:210:23)
+    ... 3 lines matching cause stack trace ...
+    at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+  name: 'KafkaJSNumberOfRetriesExceeded',
+  retriable: false,
+  helpUrl: undefined,
+  retryCount: 5,
+  retryTime: 11928,
+  [cause]: KafkaJSConnectionError: Connection error: 
+      at Socket.onError (/app/node_modules/kafkajs/src/network/connection.js:210:23)
+      at Socket.emit (node:events:524:28)
+      at emitErrorNT (node:internal/streams/destroy:169:8)
+      at emitErrorCloseNT (node:internal/streams/destroy:128:3)
+      at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+    retriable: true,
+    helpUrl: undefined,
+    broker: 'localhost:9092',
+    code: 'ECONNREFUSED',
+    [cause]: undefined
+  }
+}
+
+Node.js v20.19.2
+
+Previous container logs (if crashed):
+  name: 'KafkaJSNumberOfRetriesExceeded',
+  retriable: false,
+  helpUrl: undefined,
+  retryCount: 5,
+  retryTime: 11928,
+  [cause]: KafkaJSConnectionError: Connection error: 
+      at Socket.onError (/app/node_modules/kafkajs/src/network/connection.js:210:23)
+      at Socket.emit (node:events:524:28)
+      at emitErrorNT (node:internal/streams/destroy:169:8)
+      at emitErrorCloseNT (node:internal/streams/destroy:128:3)
+      at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
+    retriable: true,
+    helpUrl: undefined,
+    broker: 'localhost:9092',
+    code: 'ECONNREFUSED',
+    [cause]: undefined
+  }
+}
+
+Node.js v20.19.2
+----------------------------------------
+
+🔧 4. CHECKING INFRASTRUCTURE SERVICES
+======================================
+
+--- Logs for postgres ---
+Pod: postgres-78c679f78c-g5qlz
+Recent logs:
+Data page checksums are disabled.
+
+fixing permissions on existing directory /var/lib/postgresql/data ... ok
+creating subdirectories ... ok
+selecting dynamic shared memory implementation ... posix
+selecting default max_connections ... 100
+selecting default shared_buffers ... 128MB
+selecting default time zone ... Etc/UTC
+creating configuration files ... ok
+running bootstrap script ... ok
+performing post-bootstrap initialization ... ok
+initdb: warning: enabling "trust" authentication for local connections
+You can change this by editing pg_hba.conf or using the option -A, or
+--auth-local and --auth-host, the next time you run initdb.
+syncing data to disk ... ok
+
+
+Success. You can now start the database server using:
+
+    pg_ctl -D /var/lib/postgresql/data -l logfile start
+
+waiting for server to start....2025-06-22 03:54:22.887 UTC [49] LOG:  starting PostgreSQL 13.21 (Debian 13.21-1.pgdg120+1) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 12.2.0-14) 12.2.0, 64-bit
+2025-06-22 03:54:22.887 UTC [49] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2025-06-22 03:54:22.891 UTC [50] LOG:  database system was shut down at 2025-06-22 03:54:22 UTC
+2025-06-22 03:54:22.897 UTC [49] LOG:  database system is ready to accept connections
+ done
+server started
+CREATE DATABASE
+
+
+/usr/local/bin/docker-entrypoint.sh: ignoring /docker-entrypoint-initdb.d/*
+
+waiting for server to shut down...2025-06-22 03:54:23.113 UTC [49] LOG:  received fast shutdown request
+.2025-06-22 03:54:23.113 UTC [49] LOG:  aborting any active transactions
+2025-06-22 03:54:23.114 UTC [49] LOG:  background worker "logical replication launcher" (PID 56) exited with exit code 1
+2025-06-22 03:54:23.114 UTC [51] LOG:  shutting down
+2025-06-22 03:54:23.119 UTC [49] LOG:  database system is shut down
+ done
+server stopped
+
+PostgreSQL init process complete; ready for start up.
+
+2025-06-22 03:54:23.233 UTC [1] LOG:  starting PostgreSQL 13.21 (Debian 13.21-1.pgdg120+1) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 12.2.0-14) 12.2.0, 64-bit
+2025-06-22 03:54:23.233 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+2025-06-22 03:54:23.233 UTC [1] LOG:  listening on IPv6 address "::", port 5432
+2025-06-22 03:54:23.234 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2025-06-22 03:54:23.236 UTC [64] LOG:  database system was shut down at 2025-06-22 03:54:23 UTC
+2025-06-22 03:54:23.239 UTC [1] LOG:  database system is ready to accept connections
+2025-06-22 03:55:07.757 UTC [71] ERROR:  type "orders_status_enum" already exists
+2025-06-22 03:55:07.757 UTC [71] STATEMENT:  CREATE TYPE "public"."orders_status_enum" AS ENUM('PENDING', 'CONFIRMED', 'SHIPPED', 'DELIVERED', 'CANCELLED')
+
+Previous container logs (if crashed):
+No previous logs available
+----------------------------------------
+
+--- Logs for kafka ---
+Pod: kafka-67c59c9bbf-d5rlr
+Recent logs:
+[2025-06-22 03:55:11,213] INFO [MetadataCache brokerId=1] Updated cache from existing <empty> to latest FinalizedFeaturesAndEpoch(features=Map(), epoch=0). (kafka.server.metadata.ZkMetadataCache)
+[2025-06-22 03:55:11,213] INFO [Controller id=1] Registering handlers (kafka.controller.KafkaController)
+[2025-06-22 03:55:11,217] INFO [Controller id=1] Deleting log dir event notifications (kafka.controller.KafkaController)
+[2025-06-22 03:55:11,219] INFO [Controller id=1] Deleting isr change notifications (kafka.controller.KafkaController)
+[2025-06-22 03:55:11,221] INFO [Controller id=1] Initializing controller context (kafka.controller.KafkaController)
+[2025-06-22 03:55:11,230] INFO [Controller id=1] Initialized broker epochs cache: HashMap(1 -> 27) (kafka.controller.KafkaController)
+[2025-06-22 03:55:11,308] INFO [ExpirationReaper-1-AlterAcls]: Starting (kafka.server.DelayedOperationPurgatory$ExpiredOperationReaper)
+[2025-06-22 03:55:11,309] DEBUG [Controller id=1] Register BrokerModifications handler for Set(1) (kafka.controller.KafkaController)
+[2025-06-22 03:55:11,315] DEBUG [Channel manager on controller 1]: Controller 1 trying to connect to broker 1 (kafka.controller.ControllerChannelManager)
+[2025-06-22 03:55:11,320] INFO [RequestSendThread controllerId=1] Starting (kafka.controller.RequestSendThread)
+[2025-06-22 03:55:11,321] INFO [Controller id=1] Currently active brokers in the cluster: Set(1) (kafka.controller.KafkaController)
+[2025-06-22 03:55:11,321] INFO [Controller id=1] Currently shutting brokers in the cluster: HashSet() (kafka.controller.KafkaController)
+[2025-06-22 03:55:11,321] INFO [Controller id=1] Current list of topics in the cluster: HashSet() (kafka.controller.KafkaController)
+[2025-06-22 03:55:11,321] INFO [Controller id=1] Fetching topic deletions in progress (kafka.controller.KafkaController)
+[2025-06-22 03:55:11,324] INFO [Controller id=1] List of topics to be deleted:  (kafka.controller.KafkaController)
+[2025-06-22 03:55:11,324] INFO [Controller id=1] List of topics ineligible for deletion:  (kafka.controller.KafkaController)
+[2025-06-22 03:55:11,324] INFO [Controller id=1] Initializing topic deletion manager (kafka.controller.KafkaController)
+[2025-06-22 03:55:11,324] INFO [Topic Deletion Manager 1] Initializing manager with initial deletions: Set(), initial ineligible deletions: HashSet() (kafka.controller.TopicDeletionManager)
+[2025-06-22 03:55:11,324] INFO [Controller id=1] Sending update metadata request (kafka.controller.KafkaController)
+[2025-06-22 03:55:11,326] INFO [Controller id=1 epoch=1] Sending UpdateMetadata request to brokers HashSet(1) for 0 partitions (state.change.logger)
+[2025-06-22 03:55:11,337] INFO [/config/changes-event-process-thread]: Starting (kafka.common.ZkNodeChangeNotificationListener$ChangeEventProcessThread)
+[2025-06-22 03:55:11,340] INFO [ReplicaStateMachine controllerId=1] Initializing replica state (kafka.controller.ZkReplicaStateMachine)
+[2025-06-22 03:55:11,340] INFO [ReplicaStateMachine controllerId=1] Triggering online replica state changes (kafka.controller.ZkReplicaStateMachine)
+[2025-06-22 03:55:11,405] INFO [ReplicaStateMachine controllerId=1] Triggering offline replica state changes (kafka.controller.ZkReplicaStateMachine)
+[2025-06-22 03:55:11,406] DEBUG [ReplicaStateMachine controllerId=1] Started replica state machine with initial state -> HashMap() (kafka.controller.ZkReplicaStateMachine)
+[2025-06-22 03:55:11,406] INFO [PartitionStateMachine controllerId=1] Initializing partition state (kafka.controller.ZkPartitionStateMachine)
+[2025-06-22 03:55:11,407] INFO [PartitionStateMachine controllerId=1] Triggering online partition state changes (kafka.controller.ZkPartitionStateMachine)
+[2025-06-22 03:55:11,411] DEBUG [PartitionStateMachine controllerId=1] Started partition state machine with initial state -> HashMap() (kafka.controller.ZkPartitionStateMachine)
+[2025-06-22 03:55:11,411] INFO [Controller id=1] Ready to serve as the new controller with epoch 1 (kafka.controller.KafkaController)
+[2025-06-22 03:55:11,415] INFO [RequestSendThread controllerId=1] Controller 1 connected to kafka-service:29092 (id: 1 rack: null) for sending state change requests (kafka.controller.RequestSendThread)
+[2025-06-22 03:55:11,415] INFO [SocketServer listenerType=ZK_BROKER, nodeId=1] Enabling request processing. (kafka.network.SocketServer)
+[2025-06-22 03:55:11,418] INFO [Controller id=1] Partitions undergoing preferred replica election:  (kafka.controller.KafkaController)
+[2025-06-22 03:55:11,419] INFO [Controller id=1] Partitions that completed preferred replica election:  (kafka.controller.KafkaController)
+[2025-06-22 03:55:11,420] INFO [Controller id=1] Skipping preferred replica election for partitions due to topic deletion:  (kafka.controller.KafkaController)
+[2025-06-22 03:55:11,420] INFO [Controller id=1] Resuming preferred replica election for partitions:  (kafka.controller.KafkaController)
+[2025-06-22 03:55:11,422] INFO [Controller id=1] Starting replica leader election (PREFERRED) for partitions  triggered by ZkTriggered (kafka.controller.KafkaController)
+[2025-06-22 03:55:11,505] INFO Kafka version: 7.4.0-ccs (org.apache.kafka.common.utils.AppInfoParser)
+[2025-06-22 03:55:11,505] INFO Kafka commitId: 30969fa33c185e880b9e02044761dfaac013151d (org.apache.kafka.common.utils.AppInfoParser)
+[2025-06-22 03:55:11,505] INFO Kafka startTimeMs: 1750564511423 (org.apache.kafka.common.utils.AppInfoParser)
+[2025-06-22 03:55:11,508] INFO [KafkaServer id=1] started (kafka.server.KafkaServer)
+[2025-06-22 03:55:11,514] INFO [Controller id=1] Starting the controller scheduler (kafka.controller.KafkaController)
+[2025-06-22 03:55:11,683] TRACE [Controller id=1 epoch=1] Received response UpdateMetadataResponseData(errorCode=0) for request UPDATE_METADATA with correlation id 0 sent to broker kafka-service:29092 (id: 1 rack: null) (state.change.logger)
+[2025-06-22 03:55:11,775] INFO [BrokerToControllerChannelManager broker=1 name=alterPartition]: Recorded new controller, from now on will use node kafka-service:29092 (id: 1 rack: null) (kafka.server.BrokerToControllerRequestThread)
+[2025-06-22 03:55:11,776] INFO [BrokerToControllerChannelManager broker=1 name=forwarding]: Recorded new controller, from now on will use node kafka-service:29092 (id: 1 rack: null) (kafka.server.BrokerToControllerRequestThread)
+[2025-06-22 03:55:16,520] INFO [Controller id=1] Processing automatic preferred replica leader election (kafka.controller.KafkaController)
+[2025-06-22 03:55:16,521] TRACE [Controller id=1] Checking need to trigger auto leader balancing (kafka.controller.KafkaController)
+[2025-06-22 04:00:16,538] INFO [Controller id=1] Processing automatic preferred replica leader election (kafka.controller.KafkaController)
+[2025-06-22 04:00:16,540] TRACE [Controller id=1] Checking need to trigger auto leader balancing (kafka.controller.KafkaController)
+[2025-06-22 04:05:16,546] INFO [Controller id=1] Processing automatic preferred replica leader election (kafka.controller.KafkaController)
+[2025-06-22 04:05:16,548] TRACE [Controller id=1] Checking need to trigger auto leader balancing (kafka.controller.KafkaController)
+
+Previous container logs (if crashed):
+No previous logs available
+----------------------------------------
+
+--- Logs for zookeeper ---
+Pod: zookeeper-5c664f7f5-6vqzx
+Recent logs:
+[2025-06-22 03:54:51,023] INFO zookeeper.digest.enabled = true (org.apache.zookeeper.server.ZooKeeperServer)
+[2025-06-22 03:54:51,023] INFO zookeeper.closeSessionTxn.enabled = true (org.apache.zookeeper.server.ZooKeeperServer)
+[2025-06-22 03:54:51,023] INFO zookeeper.flushDelay=0 (org.apache.zookeeper.server.ZooKeeperServer)
+[2025-06-22 03:54:51,024] INFO zookeeper.maxWriteQueuePollTime=0 (org.apache.zookeeper.server.ZooKeeperServer)
+[2025-06-22 03:54:51,024] INFO zookeeper.maxBatchSize=1000 (org.apache.zookeeper.server.ZooKeeperServer)
+[2025-06-22 03:54:51,024] INFO zookeeper.intBufferStartingSizeBytes = 1024 (org.apache.zookeeper.server.ZooKeeperServer)
+[2025-06-22 03:54:51,024] INFO Weighed connection throttling is disabled (org.apache.zookeeper.server.BlueThrottle)
+[2025-06-22 03:54:51,025] INFO minSessionTimeout set to 4000 (org.apache.zookeeper.server.ZooKeeperServer)
+[2025-06-22 03:54:51,025] INFO maxSessionTimeout set to 40000 (org.apache.zookeeper.server.ZooKeeperServer)
+[2025-06-22 03:54:51,026] INFO Response cache size is initialized with value 400. (org.apache.zookeeper.server.ResponseCache)
+[2025-06-22 03:54:51,026] INFO Response cache size is initialized with value 400. (org.apache.zookeeper.server.ResponseCache)
+[2025-06-22 03:54:51,093] INFO zookeeper.pathStats.slotCapacity = 60 (org.apache.zookeeper.server.util.RequestPathMetricsCollector)
+[2025-06-22 03:54:51,093] INFO zookeeper.pathStats.slotDuration = 15 (org.apache.zookeeper.server.util.RequestPathMetricsCollector)
+[2025-06-22 03:54:51,093] INFO zookeeper.pathStats.maxDepth = 6 (org.apache.zookeeper.server.util.RequestPathMetricsCollector)
+[2025-06-22 03:54:51,093] INFO zookeeper.pathStats.initialDelay = 5 (org.apache.zookeeper.server.util.RequestPathMetricsCollector)
+[2025-06-22 03:54:51,093] INFO zookeeper.pathStats.delay = 5 (org.apache.zookeeper.server.util.RequestPathMetricsCollector)
+[2025-06-22 03:54:51,093] INFO zookeeper.pathStats.enabled = false (org.apache.zookeeper.server.util.RequestPathMetricsCollector)
+[2025-06-22 03:54:51,110] INFO The max bytes for all large requests are set to 104857600 (org.apache.zookeeper.server.ZooKeeperServer)
+[2025-06-22 03:54:51,110] INFO The large request threshold is set to -1 (org.apache.zookeeper.server.ZooKeeperServer)
+[2025-06-22 03:54:51,110] INFO Created server with tickTime 2000 minSessionTimeout 4000 maxSessionTimeout 40000 clientPortListenBacklog -1 datadir /var/lib/zookeeper/log/version-2 snapdir /var/lib/zookeeper/data/version-2 (org.apache.zookeeper.server.ZooKeeperServer)
+[2025-06-22 03:54:51,127] INFO Logging initialized @1397ms to org.eclipse.jetty.util.log.Slf4jLog (org.eclipse.jetty.util.log)
+[2025-06-22 03:54:51,417] WARN o.e.j.s.ServletContextHandler@387a8303{/,null,STOPPED} contextPath ends with /* (org.eclipse.jetty.server.handler.ContextHandler)
+[2025-06-22 03:54:51,417] WARN Empty contextPath (org.eclipse.jetty.server.handler.ContextHandler)
+[2025-06-22 03:54:51,430] INFO jetty-9.4.48.v20220622; built: 2022-06-21T20:42:25.880Z; git: 6b67c5719d1f4371b33655ff2d047d24e171e49a; jvm 11.0.18+10-LTS (org.eclipse.jetty.server.Server)
+[2025-06-22 03:54:51,518] INFO DefaultSessionIdManager workerName=node0 (org.eclipse.jetty.server.session)
+[2025-06-22 03:54:51,518] INFO No SessionScavenger set, using defaults (org.eclipse.jetty.server.session)
+[2025-06-22 03:54:51,519] INFO node0 Scavenging every 600000ms (org.eclipse.jetty.server.session)
+[2025-06-22 03:54:51,521] WARN ServletContext@o.e.j.s.ServletContextHandler@387a8303{/,null,STARTING} has uncovered http methods for path: /* (org.eclipse.jetty.security.SecurityHandler)
+[2025-06-22 03:54:51,528] INFO Started o.e.j.s.ServletContextHandler@387a8303{/,null,AVAILABLE} (org.eclipse.jetty.server.handler.ContextHandler)
+[2025-06-22 03:54:51,617] INFO Started ServerConnector@7ce026d3{HTTP/1.1, (http/1.1)}{0.0.0.0:8080} (org.eclipse.jetty.server.AbstractConnector)
+[2025-06-22 03:54:51,618] INFO Started @1887ms (org.eclipse.jetty.server.Server)
+[2025-06-22 03:54:51,618] INFO Started AdminServer on address 0.0.0.0, port 8080 and command URL /commands (org.apache.zookeeper.server.admin.JettyAdminServer)
+[2025-06-22 03:54:51,623] INFO Using org.apache.zookeeper.server.NIOServerCnxnFactory as server connection factory (org.apache.zookeeper.server.ServerCnxnFactory)
+[2025-06-22 03:54:51,624] WARN maxCnxns is not configured, using default value 0. (org.apache.zookeeper.server.ServerCnxnFactory)
+[2025-06-22 03:54:51,625] INFO Configuring NIO connection handler with 10s sessionless connection timeout, 1 selector thread(s), 2 worker threads, and 64 kB direct buffers. (org.apache.zookeeper.server.NIOServerCnxnFactory)
+[2025-06-22 03:54:51,626] INFO binding to port 0.0.0.0/0.0.0.0:2181 (org.apache.zookeeper.server.NIOServerCnxnFactory)
+[2025-06-22 03:54:51,713] INFO Using org.apache.zookeeper.server.watch.WatchManager as watch manager (org.apache.zookeeper.server.watch.WatchManagerFactory)
+[2025-06-22 03:54:51,713] INFO Using org.apache.zookeeper.server.watch.WatchManager as watch manager (org.apache.zookeeper.server.watch.WatchManagerFactory)
+[2025-06-22 03:54:51,714] INFO zookeeper.snapshotSizeFactor = 0.33 (org.apache.zookeeper.server.ZKDatabase)
+[2025-06-22 03:54:51,714] INFO zookeeper.commitLogCount=500 (org.apache.zookeeper.server.ZKDatabase)
+[2025-06-22 03:54:51,718] INFO zookeeper.snapshot.compression.method = CHECKED (org.apache.zookeeper.server.persistence.SnapStream)
+[2025-06-22 03:54:51,719] INFO Snapshotting: 0x0 to /var/lib/zookeeper/data/version-2/snapshot.0 (org.apache.zookeeper.server.persistence.FileTxnSnapLog)
+[2025-06-22 03:54:51,720] INFO Snapshot loaded in 7 ms, highest zxid is 0x0, digest is 1371985504 (org.apache.zookeeper.server.ZKDatabase)
+[2025-06-22 03:54:51,720] INFO Snapshotting: 0x0 to /var/lib/zookeeper/data/version-2/snapshot.0 (org.apache.zookeeper.server.persistence.FileTxnSnapLog)
+[2025-06-22 03:54:51,721] INFO Snapshot taken in 0 ms (org.apache.zookeeper.server.ZooKeeperServer)
+[2025-06-22 03:54:51,726] INFO zookeeper.request_throttler.shutdownTimeout = 10000 (org.apache.zookeeper.server.RequestThrottler)
+[2025-06-22 03:54:51,726] INFO PrepRequestProcessor (sid:0) started, reconfigEnabled=false (org.apache.zookeeper.server.PrepRequestProcessor)
+[2025-06-22 03:54:51,735] INFO Using checkIntervalMs=60000 maxPerMinute=10000 maxNeverUsedIntervalMs=0 (org.apache.zookeeper.server.ContainerManager)
+[2025-06-22 03:54:51,736] INFO ZooKeeper audit is disabled. (org.apache.zookeeper.audit.ZKAuditProvider)
+[2025-06-22 03:55:07,175] INFO Creating new log file: log.1 (org.apache.zookeeper.server.persistence.FileTxnLog)
+
+Previous container logs (if crashed):
+No previous logs available
+----------------------------------------
+
+🌐 5. CHECKING SERVICES AND NETWORKING
+======================================
+Services:
+NAME                           TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)              AGE
+kafka-service                  ClusterIP   10.104.136.185   <none>        9092/TCP,29092/TCP   10m
+kafka-ui-service               NodePort    10.111.176.168   <none>        8080:30823/TCP       10m
+logger-service-service         ClusterIP   10.109.116.107   <none>        3000/TCP             10m
+notification-service-service   ClusterIP   10.109.40.142    <none>        3000/TCP             10m
+order-gateway-service          NodePort    10.105.20.236    <none>        3000:32413/TCP       10m
+order-service-service          ClusterIP   10.105.98.43     <none>        3000/TCP             10m
+postgres-service               ClusterIP   10.106.128.61    <none>        5432/TCP             11m
+zookeeper-service              ClusterIP   10.108.122.93    <none>        2181/TCP             11m
+
+ConfigMaps:
+NAME               DATA   AGE
+app-config         6      11m
+kube-root-ca.crt   1      11m
+
+Secrets:
+NAME          TYPE     DATA   AGE
+app-secrets   Opaque   1      11m
+
+📊 6. RESOURCE USAGE
+===================
+Node resources:
+NAME       CPU(cores)   CPU%   MEMORY(bytes)   MEMORY%   
+minikube   423m         5%     3442Mi          43%       
+
+Pod resources:
+NAME                        CPU(cores)   MEMORY(bytes)   
+kafka-67c59c9bbf-d5rlr      18m          343Mi           
+kafka-ui-7bf56b5c7c-kd4z7   5m           329Mi           
+postgres-78c679f78c-g5qlz   2m           41Mi            
+zookeeper-5c664f7f5-6vqzx   7m           104Mi           
+
+🔍 7. TROUBLESHOOTING SUMMARY
+=============================
+Common issues to check:
+1. Database connection issues - Check if PostgreSQL is ready
+2. Kafka connection issues - Check if Kafka and Zookeeper are ready
+3. Environment variables - Check if ConfigMap and Secrets are correct
+4. Image pull issues - Check if Docker images exist in Minikube
+5. Port conflicts or networking issues
+6. Resource constraints (CPU/Memory)
+
+💡 QUICK DIAGNOSTIC COMMANDS:
+=============================
+Check specific pod logs:
+kubectl logs <pod-name> -n kafka-microservices
+
+Check previous crashed container logs:
+kubectl logs <pod-name> -n kafka-microservices --previous
+
+Get into a running pod for debugging:
+kubectl exec -it <pod-name> -n kafka-microservices -- /bin/sh
+
+Check if services can reach each other:
+kubectl exec -it <pod-name> -n kafka-microservices -- nslookup postgres-service
+kubectl exec -it <pod-name> -n kafka-microservices -- nslookup kafka-service

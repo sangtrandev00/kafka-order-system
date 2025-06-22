@@ -1,0 +1,4 @@
+---
+- name: Display deployment status
+  debug:
+    msg: "Networking configuration completed"
