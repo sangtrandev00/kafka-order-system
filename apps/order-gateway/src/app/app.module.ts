@@ -16,7 +16,7 @@ import { OrderService } from './order/order.service';
         options: {
           client: {
             clientId: 'order-gateway',
-            brokers: ['localhost:9092'],
+            brokers: [process.env.KAFKA_BROKERS || 'kafka-service:9092'],
             retry: {
               initialRetryTime: 100,
               retries: 8,
