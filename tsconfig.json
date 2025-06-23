@@ -29,6 +29,12 @@
     },
     {
       "path": "./libs/shared"
+    },
+    {
+      "path": "./apps/upload-service-e2e"
+    },
+    {
+      "path": "./apps/upload-service"
     }
   ]
 }

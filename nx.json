@@ -70,7 +70,8 @@
         "apps/order-gateway-e2e/**/*",
         "apps/order-service-e2e/**/*",
         "apps/notification-service-e2e/**/*",
-        "apps/logger-service-e2e/**/*"
+        "apps/logger-service-e2e/**/*",
+        "apps/upload-service-e2e/**/*"
       ]
     },
     {

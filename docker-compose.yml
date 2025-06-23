@@ -79,5 +79,56 @@ services:
       LOGGING_LEVEL_COM_PROVECTUS: DEBUG
     restart: unless-stopped
 
+  # MongoDB for file metadata and saga state
+  mongodb:
+    image: mongo:7.0
+    networks:
+      - kafka-network
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin123
+      MONGO_INITDB_DATABASE: kafka_microservices
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongodb_data:/data/db
+
+  # LocalStack for S3 simulation (development only)
+  localstack:
+    image: localstack/localstack:latest
+    networks:
+      - kafka-network
+    ports:
+      - '4566:4566' # LocalStack edge port
+      - '4571:4571' # LocalStack web UI
+    environment:
+      - SERVICES=s3
+      - DEBUG=1
+      - DATA_DIR=/var/lib/localstack/data
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - DEFAULT_REGION=us-east-1
+      - PERSISTENCE=1
+    volumes:
+      - localstack_data:/var/lib/localstack
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  # MongoDB Express for database management (optional)
+  mongo-express:
+    image: mongo-express:latest
+    networks:
+      - kafka-network
+    restart: always
+    ports:
+      - '8081:8081'
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: admin123
+      ME_CONFIG_MONGODB_URL: mongodb://admin:admin123@mongodb:27017/
+    depends_on:
+      - mongodb
+
+# FIXED: Added missing localstack_data volume
 volumes:
   postgres_data:
+  mongodb_data:
+  localstack_data:
