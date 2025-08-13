@@ -35,6 +35,9 @@
     },
     {
       "path": "./apps/upload-service"
+    },
+    {
+      "path": "./libs/shared"
     }
   ]
 }

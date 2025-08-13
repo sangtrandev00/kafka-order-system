@@ -1,0 +1,49 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+        cors:
+          allowed_origins:
+            - http://localhost:3000
+            - http://localhost:8080
+
+processors:
+  batch:
+    timeout: 1s
+    send_batch_size: 1024
+  memory_limiter:
+    limit_mib: 1000
+  resource/signoz:
+    attributes:
+      - key: signoz.collector.name
+        value: "signoz-otel-collector"
+        action: insert
+
+exporters:
+  clickhouse:
+    endpoint: tcp://signoz-clickhouse:9000
+    database: signoz_traces
+    ttl: 72h
+    traces_table_name: signoz_traces
+    metrics_table_name: signoz_metrics
+    logs_table_name: signoz_logs
+  logging:
+    loglevel: debug
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [memory_limiter, resource/signoz, batch]
+      exporters: [clickhouse, logging]
+    metrics:
+      receivers: [otlp]
+      processors: [memory_limiter, resource/signoz, batch]
+      exporters: [clickhouse, logging]
+    logs:
+      receivers: [otlp]
+      processors: [memory_limiter, resource/signoz, batch]
+      exporters: [clickhouse, logging]

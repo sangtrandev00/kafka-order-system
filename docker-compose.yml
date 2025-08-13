@@ -1,11 +1,6 @@
-version: '3.8'
-
 networks:
   kafka-network:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.20.0.0/16
+    external: true
 
 services:
   zookeeper:
