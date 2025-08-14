@@ -5,7 +5,10 @@ export const createPinoAsyncConfig = (): LoggerModuleAsyncParams => ({
   inject: [ConfigService],
   useFactory: async (configService: ConfigService) => {
     const isDevelopment = configService.get('NODE_ENV') !== 'production';
-    const serviceName = configService.get('SERVICE_NAME', 'kafka-microservices');
+    const serviceName = configService.get(
+      'SERVICE_NAME',
+      'kafka-microservices'
+    );
     const signozEnabled = configService.get('SIGNOZ_ENABLED') === 'true';
     const signozLogsEndpoint = configService.get('SIGNOZ_LOGS_ENDPOINT');
     const signozAccessToken = configService.get('SIGNOZ_ACCESS_TOKEN');
@@ -38,16 +41,21 @@ export const createPinoAsyncConfig = (): LoggerModuleAsyncParams => ({
           resourceAttributes: {
             'service.name': serviceName,
             'service.version': '1.0.0',
-            'deployment.environment': configService.get('NODE_ENV', 'development'),
+            'deployment.environment': configService.get(
+              'NODE_ENV',
+              'development'
+            ),
           },
           logRecordProcessorOptions: {
             recordProcessorType: 'batch',
             exporterOptions: {
               protocol: 'http',
               url: signozLogsEndpoint,
-              headers: signozAccessToken ? {
-                'signoz-access-token': signozAccessToken,
-              } : {},
+              headers: signozAccessToken
+                ? {
+                    'signoz-access-token': signozAccessToken,
+                  }
+                : {},
             },
           },
         },
@@ -57,7 +65,7 @@ export const createPinoAsyncConfig = (): LoggerModuleAsyncParams => ({
     return {
       pinoHttp: {
         level: isDevelopment ? 'debug' : 'info',
-        transport: transports.length > 0 ? transports : undefined,
+        transport: transports.length > 0 ? { targets: transports } : undefined,
         customProps: (req, res) => ({
           context: 'HTTP',
           userId: req.headers['x-user-id'],

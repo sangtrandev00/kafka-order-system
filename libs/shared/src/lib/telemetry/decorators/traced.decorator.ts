@@ -1,10 +1,10 @@
-import { trace, context, SpanStatusCode } from '@opentelemetry/api';
+import { trace, SpanStatusCode } from '@opentelemetry/api';
 
 export function Traced(spanName?: string, recordMetrics = false) {
   return function (
     target: any,
     propertyKey: string,
-    descriptor: PropertyDescriptor,
+    descriptor: PropertyDescriptor
   ) {
     const originalMethod = descriptor.value;
     const tracer = trace.getTracer('kafka-microservices', '1.0.0');
@@ -15,7 +15,8 @@ export function Traced(spanName?: string, recordMetrics = false) {
         return await originalMethod.apply(this, args);
       }
 
-      const finalSpanName = spanName || `${target.constructor.name}.${propertyKey}`;
+      const finalSpanName =
+        spanName || `${target.constructor.name}.${propertyKey}`;
       const startTime = Date.now();
 
       return await tracer.startActiveSpan(finalSpanName, async (span) => {
@@ -29,7 +30,7 @@ export function Traced(spanName?: string, recordMetrics = false) {
 
           const result = await originalMethod.apply(this, args);
           const duration = Date.now() - startTime;
-          
+
           span.setStatus({ code: SpanStatusCode.OK });
           span.setAttributes({
             'operation.duration_ms': duration,
@@ -39,16 +40,17 @@ export function Traced(spanName?: string, recordMetrics = false) {
           return result;
         } catch (error) {
           const duration = Date.now() - startTime;
-          
-          span.recordException(error);
+
+          span.recordException(error as Error);
           span.setStatus({
             code: SpanStatusCode.ERROR,
-            message: error.message,
+            message: error instanceof Error ? error.message : 'Unknown error',
           });
           span.setAttributes({
             'operation.duration_ms': duration,
             'operation.success': false,
-            'error.type': error.constructor.name,
+            'error.type':
+              error instanceof Error ? error.constructor.name : 'Unknown',
           });
 
           throw error;

@@ -1,15 +1,15 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  GetOrderByIdRequest,
+  GetOrderByIdResponse,
+  GetOrdersRequest,
+  GetOrdersResponse,
+  OrderCreatedEvent,
+  OrderStatus,
+} from '@kafka-microservices/shared';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { OrderEntity } from './order.entity';
-import {
-  OrderCreatedEvent,
-  OrderStatus,
-  GetOrdersRequest,
-  GetOrdersResponse,
-  GetOrderByIdRequest,
-  GetOrderByIdResponse,
-} from '@kafka-microservices/shared';
 
 @Injectable()
 export class OrderService {

@@ -4,9 +4,16 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { OrderController } from './order/order.controller';
 import { OrderService } from './order/order.service';
 import { OrderEntity } from './order/order.entity';
+import {
+  createPinoAsyncConfig,
+  GlobalTracingModule,
+} from '@kafka-microservices/shared';
+import { LoggerModule } from 'nestjs-pino';
 
 @Module({
   imports: [
+    GlobalTracingModule,
+    LoggerModule.forRootAsync(createPinoAsyncConfig()),
     ConfigModule.forRoot({
       isGlobal: true,
     }),

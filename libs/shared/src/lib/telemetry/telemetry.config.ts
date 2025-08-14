@@ -3,8 +3,8 @@ import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentation
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-http';
 import { PeriodicExportingMetricReader } from '@opentelemetry/sdk-metrics';
-// import { Resource } from '@opentelemetry/resources';
-// import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
+import { Resource } from '@opentelemetry/resources';
+import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
 
 export interface TelemetryConfig {
   serviceName: string;
@@ -26,31 +26,36 @@ export class TelemetryConfigService {
       return;
     }
 
-    // const resource = Resource.default().merge(
-    //   new Resource({
-    //     [SemanticResourceAttributes.SERVICE_NAME]: config.serviceName,
-    //     [SemanticResourceAttributes.SERVICE_VERSION]: config.serviceVersion || '1.0.0',
-    //     [SemanticResourceAttributes.DEPLOYMENT_ENVIRONMENT]: config.environment || 'development',
-    //   }),
-    // );
+    const resource = Resource.default().merge(
+      new Resource({
+        [SemanticResourceAttributes.SERVICE_NAME]: config.serviceName,
+        [SemanticResourceAttributes.SERVICE_VERSION]:
+          config.serviceVersion || '1.0.0',
+        [SemanticResourceAttributes.DEPLOYMENT_ENVIRONMENT]:
+          config.environment || 'development',
+      })
+    );
 
     const instrumentations = getNodeAutoInstrumentations({
       '@opentelemetry/instrumentation-fs': { enabled: false },
       '@opentelemetry/instrumentation-dns': { enabled: false },
-      '@opentelemetry/instrumentation-pino': { 
+      '@opentelemetry/instrumentation-pino': {
         enabled: true,
         logHook: (span, record) => {
           record['trace_id'] = span.spanContext().traceId;
           record['span_id'] = span.spanContext().spanId;
           record['trace_flags'] = span.spanContext().traceFlags;
-        }
+        },
       },
       '@opentelemetry/instrumentation-http': {
         enabled: true,
         ignoreIncomingRequestHook: (req) => {
-          return req.url?.includes('/health') || 
-                 req.url?.includes('/metrics') || 
-                 req.url?.includes('/favicon.ico') || false;
+          return (
+            req.url?.includes('/health') ||
+            req.url?.includes('/metrics') ||
+            req.url?.includes('/favicon.ico') ||
+            false
+          );
         },
       },
       // '@opentelemetry/instrumentation-kafkajs': { enabled: true },
@@ -63,18 +68,22 @@ export class TelemetryConfigService {
     if (config.enableTraces && config.signozEndpoint) {
       traceExporter = new OTLPTraceExporter({
         url: `${config.signozEndpoint}/v1/traces`,
-        headers: config.signozAccessToken ? {
-          'signoz-access-token': config.signozAccessToken,
-        } : {},
+        headers: config.signozAccessToken
+          ? {
+              'signoz-access-token': config.signozAccessToken,
+            }
+          : {},
       });
     }
 
     if (config.enableMetrics && config.signozEndpoint) {
       const metricExporter = new OTLPMetricExporter({
         url: `${config.signozEndpoint}/v1/metrics`,
-        headers: config.signozAccessToken ? {
-          'signoz-access-token': config.signozAccessToken,
-        } : {},
+        headers: config.signozAccessToken
+          ? {
+              'signoz-access-token': config.signozAccessToken,
+            }
+          : {},
       });
 
       metricReader = new PeriodicExportingMetricReader({
@@ -87,7 +96,7 @@ export class TelemetryConfigService {
       resource,
       instrumentations,
       ...(traceExporter && { traceExporter }),
-      ...(metricReader && { metricReader }),
+      ...(metricReader && { metricReader: metricReader as any }),
     });
 
     await this.sdk.start();

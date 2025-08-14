@@ -18,6 +18,11 @@
     "experimentalDecorators": true,
     "strict": true,
     "target": "es2022",
-    "customConditions": ["development"]
+    "customConditions": ["development"],
+    "baseUrl": ".",
+    "paths": {
+      "@kafka-microservices/shared": ["libs/shared/src/index.ts"],
+      "@kafka-microservices/shared/*": ["libs/shared/src/*"]
+    }
   }
 }

@@ -3,9 +3,16 @@ import { ConfigModule } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { OrderController } from './order/order.controller';
 import { OrderService } from './order/order.service';
+import {
+  createPinoAsyncConfig,
+  GlobalTracingModule,
+} from '@kafka-microservices/shared';
+import { LoggerModule } from 'nestjs-pino';
 
 @Module({
   imports: [
+    LoggerModule.forRootAsync(createPinoAsyncConfig()),
+    GlobalTracingModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),

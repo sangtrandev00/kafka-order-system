@@ -5,6 +5,14 @@ module.exports = {
   output: {
     path: join(__dirname, 'dist'),
   },
+  resolve: {
+    alias: {
+      '@kafka-microservices/shared': join(
+        __dirname,
+        '../../libs/shared/src/index.ts'
+      ),
+    },
+  },
   plugins: [
     new NxAppWebpackPlugin({
       target: 'node',
