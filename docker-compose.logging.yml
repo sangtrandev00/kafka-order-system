@@ -1,0 +1,161 @@
+# docker-compose.logging.yml - Independent observability stack
+version: '3.8'
+
+networks:
+  logging-network:
+    driver: bridge
+    name: signoz-logging-network
+
+services:
+  # ClickHouse for storing traces, metrics, and logs
+  clickhouse:
+    image: clickhouse/clickhouse-server:24.1.2-alpine
+    container_name: logging-clickhouse
+    restart: unless-stopped
+    networks:
+      - logging-network
+    environment:
+      - CLICKHOUSE_DB=default
+      - CLICKHOUSE_USER=default
+      - CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT=1
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse/
+      - ./deploy/signoz/clickhouse-config.xml:/etc/clickhouse-server/config.xml:ro
+      - ./deploy/signoz/users.xml:/etc/clickhouse-server/users.xml:ro
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: '1.0'
+        reservations:
+          memory: 1G
+          cpus: '0.5'
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          'wget --no-verbose --tries=1 --spider http://localhost:8123/ping || exit 1',
+        ]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 90s
+
+  # Zookeeper for SigNoz (independent from main Kafka)
+  zookeeper:
+    image: bitnami/zookeeper:3.7.1
+    container_name: logging-zookeeper
+    restart: unless-stopped
+    networks:
+      - logging-network
+    user: root
+    environment:
+      - ZOO_SERVER_ID=1
+      - ALLOW_ANONYMOUS_LOGIN=yes
+      - ZOO_AUTOPURGE_INTERVAL=1
+      - ZOO_MAXCLIENTCNXNS=60
+      - ZOO_PURGE_INTERVAL=24
+    volumes:
+      - zookeeper_data:/bitnami/zookeeper
+    healthcheck:
+      test: ['CMD-SHELL', 'echo ruok | nc localhost 2181 | grep imok || exit 1']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # Schema migrator - sets up ClickHouse database schema
+  schema-migrator:
+    image: signoz/signoz-schema-migrator:v0.128.2
+    container_name: logging-schema-migrator
+    restart: 'no'
+    networks:
+      - logging-network
+    command:
+      - sync
+      - --dsn=tcp://logging-clickhouse:9000/default
+      - --migrate-up
+    depends_on:
+      clickhouse:
+        condition: service_healthy
+    stop_grace_period: 30s
+
+  # SigNoz main application
+  signoz:
+    image: signoz/signoz:v0.91.0
+    container_name: logging-signoz
+    restart: unless-stopped
+    networks:
+      - logging-network
+    command:
+      - --config=/root/config/prometheus.yml
+    ports:
+      - '3301:8080' # SigNoz UI - no conflict with main services
+    volumes:
+      - ./deploy/signoz/prometheus.yml:/root/config/prometheus.yml:ro
+      - signoz_data:/var/lib/signoz/
+    environment:
+      - SIGNOZ_TELEMETRYSTORE_CLICKHOUSE_DSN=tcp://logging-clickhouse:9000/default
+      - SIGNOZ_SQLSTORE_SQLITE_PATH=/var/lib/signoz/signoz.db
+      - STORAGE=clickhouse
+      - TELEMETRY_ENABLED=true
+      - DEPLOYMENT_TYPE=docker-standalone-amd
+      - SIGNOZ_JWT_SECRET=signoz-development-secret-key
+      - CLICKHOUSE_HOST=logging-clickhouse
+      - CLICKHOUSE_PORT=9000
+      - CLICKHOUSE_DATABASE=default
+    depends_on:
+      clickhouse:
+        condition: service_healthy
+      schema-migrator:
+        condition: service_completed_successfully
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          'wget --no-verbose --tries=1 --spider http://localhost:8080/api/v1/health || exit 1',
+        ]
+      interval: 20s
+      timeout: 10s
+      retries: 8
+      start_period: 180s
+
+  # OpenTelemetry Collector - receives and processes telemetry data
+  otel-collector:
+    image: signoz/signoz-otel-collector:v0.128.2
+    container_name: logging-otel-collector
+    restart: unless-stopped
+    networks:
+      - logging-network
+    command:
+      - --config=/etc/otel-collector-config.yaml
+      - --feature-gates=-pkg.translator.prometheus.NormalizeName
+    volumes:
+      - ./deploy/signoz/otel-collector-config.yaml:/etc/otel-collector-config.yaml:ro
+    ports:
+      - '4317:4317' # OTLP gRPC receiver
+      - '4318:4318' # OTLP HTTP receiver
+      - '8888:8888' # Prometheus metrics endpoint
+    environment:
+      - OTEL_RESOURCE_ATTRIBUTES=host.name=signoz-collector,os.type=linux
+    depends_on:
+      signoz:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          'wget --no-verbose --tries=1 --spider http://localhost:8888/metrics || exit 1',
+        ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+
+volumes:
+  clickhouse_data:
+    driver: local
+  zookeeper_data:
+    driver: local
+  signoz_data:
+    driver: local
