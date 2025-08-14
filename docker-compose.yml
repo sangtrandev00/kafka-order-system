@@ -1,11 +1,15 @@
 networks:
   kafka-network:
+    driver: bridge
+  signoz-net:
+    external: true # Use SigNoz's network
 
 services:
   zookeeper:
     image: confluentinc/cp-zookeeper:7.4.0
     networks:
       - kafka-network
+      - signoz-net
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -18,6 +22,7 @@ services:
       - zookeeper
     networks:
       - kafka-network
+      - signoz-net
     ports:
       - '9092:9092'
     environment:
@@ -48,6 +53,7 @@ services:
     image: postgres:13
     networks:
       - kafka-network
+      - signoz-net
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -63,6 +69,7 @@ services:
       - kafka
     networks:
       - kafka-network
+      - signoz-net
     ports:
       - '8082:8080'
     environment:
@@ -78,6 +85,7 @@ services:
     image: mongo:7.0
     networks:
       - kafka-network
+      - signoz-net
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: admin123
@@ -92,6 +100,7 @@ services:
     image: localstack/localstack:latest
     networks:
       - kafka-network
+      - signoz-net
     ports:
       - '4566:4566' # LocalStack edge port
       - '4571:4571' # LocalStack web UI
@@ -111,6 +120,7 @@ services:
     image: mongo-express:latest
     networks:
       - kafka-network
+      - signoz-net
     restart: always
     ports:
       - '8081:8081'

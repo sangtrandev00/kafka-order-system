@@ -1,12 +1,13 @@
 import { Controller, Post, Body, Get, Param, Query } from '@nestjs/common';
 import { OrderService } from './order.service';
-import type { CreateOrderDto } from '@kafka-microservices/shared';
+import { Traced, type CreateOrderDto } from '@kafka-microservices/shared';
 
 @Controller('orders')
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 
   @Post()
+  @Traced('create_oder')
   async createOrder(@Body() createOrderDto: CreateOrderDto) {
     return this.orderService.createOrder(createOrderDto);
   }
@@ -17,6 +18,7 @@ export class OrderController {
   }
 
   @Get()
+  @Traced('get_all_orders')
   async getAllOrders(
     @Query('limit') limit?: string,
     @Query('offset') offset?: string

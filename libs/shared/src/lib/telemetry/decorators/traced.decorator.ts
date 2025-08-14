@@ -9,6 +9,8 @@ export function Traced(spanName?: string, recordMetrics = false) {
     const originalMethod = descriptor.value;
     const tracer = trace.getTracer('kafka-microservices', '1.0.0');
 
+    console.log('spanName', spanName);
+
     descriptor.value = async function (...args: any[]) {
       // Skip tracing if not enabled
       if (process.env.SIGNOZ_ENABLED !== 'true') {
