@@ -28,12 +28,15 @@ export class AutoTracingInterceptor implements NestInterceptor {
     if (process.env.SIGNOZ_ENABLED !== 'true') {
       return next.handle();
     }
+    this.logger.log('AutoTracingInterceptor', 'OpenTelemetry is enabled');
 
     // Check if method should skip tracing
     const skipTracing = this.reflector.getAllAndOverride<boolean>(
       SKIP_TRACING,
       [context.getHandler(), context.getClass()]
     );
+
+    this.logger.log('AutoTracingInterceptor', 'Skip tracing: ' + skipTracing);
 
     if (skipTracing) {
       return next.handle();

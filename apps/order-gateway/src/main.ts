@@ -2,13 +2,15 @@
  * This is not a production server yet!
  * This is only a minimal backend to get started.
  */
+// ✅ CORRECT ORDER - Set environment variables FIRST
+// Set service name BEFORE creating app
+process.env.SERVICE_NAME = 'order-gateway';
+process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 import './telemetry';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
 import { Logger as PinoLogger } from 'nestjs-pino';
 import { Logger } from '@nestjs/common';
-// Set service name BEFORE creating app
-process.env.SERVICE_NAME = 'order-gateway';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {

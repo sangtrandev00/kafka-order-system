@@ -9,11 +9,13 @@ import {
   GetOrderByIdRequest,
 } from '@kafka-microservices/shared';
 import { firstValueFrom, timeout } from 'rxjs';
+import { Logger } from 'nestjs-pino';
 
 @Injectable()
 export class OrderService {
   constructor(
-    @Inject('KAFKA_SERVICE') private readonly kafkaClient: ClientKafka
+    @Inject('KAFKA_SERVICE') private readonly kafkaClient: ClientKafka,
+    private readonly logger: Logger
   ) {}
 
   async onModuleInit() {
@@ -29,6 +31,12 @@ export class OrderService {
 
   async createOrder(createOrderDto: CreateOrderDto) {
     const orderId = uuidv4();
+
+    this.logger.log('OrderService', 'Creating order');
+    this.logger.log('OrderService', 'Order ID: ' + orderId);
+    this.logger.log('OrderService', 'Product ID: ' + createOrderDto.productId);
+    this.logger.log('OrderService', 'Quantity: ' + createOrderDto.quantity);
+    this.logger.log('OrderService', 'User ID: ' + createOrderDto.userId);
 
     // Simulate calculating total amount (in real app, this might come from product service)
     const totalAmount = createOrderDto.quantity * 100; // Assuming $100 per unit
@@ -97,6 +105,8 @@ export class OrderService {
       orderId,
       timestamp: new Date(),
     };
+
+    this.logger.log('OrderService', 'Getting order by id: ' + orderId);
 
     try {
       // Send request and wait for response

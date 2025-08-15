@@ -18,7 +18,6 @@
     "appsDir": "apps",
     "libsDir": "libs"
   },
-  "nxCloudId": "68565df92124c93d64631099",
   "plugins": [
     {
       "plugin": "@nx/js/typescript",

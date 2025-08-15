@@ -1,5 +1,4 @@
-import { trace, SpanStatusCode } from '@opentelemetry/api';
-
+import { SpanStatusCode, trace } from '@opentelemetry/api';
 export function Traced(spanName?: string, recordMetrics = false) {
   return function (
     target: any,
@@ -8,8 +7,6 @@ export function Traced(spanName?: string, recordMetrics = false) {
   ) {
     const originalMethod = descriptor.value;
     const tracer = trace.getTracer('kafka-microservices', '1.0.0');
-
-    console.log('spanName', spanName);
 
     descriptor.value = async function (...args: any[]) {
       // Skip tracing if not enabled

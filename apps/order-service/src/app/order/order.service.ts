@@ -10,12 +10,14 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { OrderEntity } from './order.entity';
+import { Logger } from 'nestjs-pino';
 
 @Injectable()
 export class OrderService {
   constructor(
     @InjectRepository(OrderEntity)
-    private readonly orderRepository: Repository<OrderEntity>
+    private readonly orderRepository: Repository<OrderEntity>,
+    private readonly logger: Logger
   ) {}
 
   async createOrder(orderData: OrderCreatedEvent): Promise<OrderEntity> {
@@ -29,7 +31,7 @@ export class OrderService {
     });
 
     const savedOrder = await this.orderRepository.save(order);
-    console.log('✅ Order saved to database:', savedOrder);
+    this.logger.log('✅ Order saved to database:', savedOrder);
 
     return savedOrder;
   }
@@ -64,7 +66,7 @@ export class OrderService {
         request.offset
       );
 
-      console.log(
+      this.logger.log(
         `✅ Retrieved ${orders.length} orders (total: ${totalCount})`
       );
 
@@ -85,7 +87,7 @@ export class OrderService {
         timestamp: new Date(),
       };
     } catch (error) {
-      console.error('❌ Error retrieving orders:', error);
+      this.logger.error('❌ Error retrieving orders:', error);
 
       return {
         requestId: request.requestId,
